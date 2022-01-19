@@ -1,0 +1,114 @@
+{
+    "_comment_type": "All\nDocuments\nTags\nTools\nVideos\nFavorite",
+    "_comment_state": "1(AC)\n2(NotAC)\n3(Unknown)",
+    "url": "https://gitee.com/lauset/tomhub-tools-plugin/raw/master/data/weburls.json",
+    "online": "gitee",
+    "update": "",
+    "list": [
+        {
+            "id": "1",
+            "isUrl": true,
+            "state": 3,
+            "name": "ElementPlus",
+            "url": "https://element-plus.gitee.io/zh-CN/",
+            "type": "Documents",
+            "tags": [
+                "ui",
+                "vue"
+            ]
+        },
+        {
+            "id": "2",
+            "isUrl": true,
+            "state": 3,
+            "name": "Vuetify",
+            "url": "https://vuetifyjs.com/zh-Hans/",
+            "type": "Documents",
+            "tags": [
+                "ui",
+                "vue"
+            ]
+        },
+        {
+            "id": "3",
+            "isUrl": true,
+            "state": 3,
+            "name": "Vue.js",
+            "url": "https://v3.cn.vuejs.org/",
+            "type": "Documents",
+            "tags": [
+                "framework",
+                "vue"
+            ]
+        },
+        {
+            "id": "4",
+            "isUrl": true,
+            "state": 3,
+            "name": "Vite",
+            "url": "https://cn.vitejs.dev/",
+            "type": "Documents",
+            "tags": [
+                "cli",
+                "vue"
+            ]
+        },
+        {
+            "id": "5",
+            "isUrl": true,
+            "state": 3,
+            "name": "ElementUI",
+            "url": "https://element.eleme.cn/#/zh-CN",
+            "type": "Documents",
+            "tags": [
+                "ui",
+                "vue"
+            ]
+        },
+        {
+            "id": "6",
+            "isUrl": true,
+            "state": 3,
+            "name": "uni-app",
+            "url": "https://uniapp.dcloud.io/",
+            "type": "Documents",
+            "tags": [
+                "ui",
+                "vue"
+            ]
+        },
+        {
+            "id": "101",
+            "isUrl": true,
+            "state": 3,
+            "name": "百度",
+            "url": "https://www.baidu.com/",
+            "type": "Tools",
+            "tags": [
+                "tools"
+            ]
+        },
+        {
+            "id": "102",
+            "isUrl": true,
+            "state": 3,
+            "name": "百度翻译",
+            "url": "https://fanyi.baidu.com/",
+            "type": "Tools",
+            "tags": [
+                "tools"
+            ]
+        },
+        {
+            "id": "103",
+            "isUrl": true,
+            "state": 3,
+            "name": "格栅导航",
+            "url": "https://gesdh.cn/",
+            "type": "Tools",
+            "tags": [
+                "tools"
+            ]
+        }
+    ]
+}

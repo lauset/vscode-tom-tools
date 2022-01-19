@@ -1,0 +1,198 @@
+{
+  "name": "tomhub-tools",
+  "displayName": "Tom Tools",
+  "description": "Convenience tools",
+  "version": "1.0.9",
+  "engines": {
+    "vscode": "^1.62.0"
+  },
+  "keywords": [
+    "vscode",
+    "plugin",
+    "tools",
+    "tom"
+  ],
+  "icon": "resources/tt-icon.png",
+  "publisher": "lauset",
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "TomTools",
+      "properties": {
+        "tomtools.owner": {
+          "type": "string",
+          "default": "tom",
+          "description": "你在 TomTools 这个世界中的名字"
+        },
+        "tomtools.welcome": {
+          "type": "boolean",
+          "default": true,
+          "description": "启动时是否显示 TomTools 的自定义欢迎页面"
+        },
+        "tomtools.urls.enable": {
+          "type": "boolean",
+          "default": false,
+          "description": "是否启用文档列表数据的'本地配置文件'"
+        },
+        "tomtools.urls.path": {
+          "type": "string",
+          "default": "",
+          "description": "文档列表数据配置文件的'本地路径'"
+        },
+        "tomtools.urls.file": {
+          "type": "string",
+          "default": "localurls.json",
+          "description": "文档列表数据配置文件的'名称'"
+        },
+        "tomtools.image.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "是否启用侧边栏文档列表面板的'背景图片'"
+        },
+        "tomtools.image.path": {
+          "type": "string",
+          "default": "https://img2.baidu.com/it/u=377119346,3218557177&fm=26&fmt=auto",
+          "description": "侧边栏文档列表面板的'背景图片路径'"
+        },
+        "tomtools.image.opacity": {
+          "type": "number",
+          "maximum": 1,
+          "minimum": 0,
+          "default": 0.2,
+          "description": "侧边栏文档列表面板的'背景图片透明度'"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "tt.hello",
+        "title": "问候一下TomTools吧"
+      },
+      {
+        "command": "tt.getFilePath",
+        "title": "获取当前文件路径"
+      },
+      {
+        "command": "tt.menuShow",
+        "title": "JS文件中才会显示的菜单项"
+      },
+      {
+        "command": "tt.welcome",
+        "title": "显示 TomTools 的欢迎页面"
+      },
+      {
+        "command": "tt.weather",
+        "title": "显示天气监测页面"
+      },
+      {
+        "command": "tt.configShow",
+        "title": "显示配置菜单"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "editorFocus",
+          "command": "tt.hello",
+          "group": "navigation@6"
+        },
+        {
+          "when": "editorFocus",
+          "command": "tt.getFilePath",
+          "group": "navigation@6"
+        },
+        {
+          "when": "editorFocus",
+          "command": "tt.weather",
+          "group": "navigation@6"
+        },
+        {
+          "when": "editorFocus && resourceLangId == javascript",
+          "command": "tt.menuShow",
+          "group": "z_commands"
+        }
+      ],
+      "editor/title": [
+        {
+          "when": "editorFocus && resourceLangId == javascript",
+          "command": "tt.menuShow",
+          "group": "navigation"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "when": "resourceLangId == javascript",
+          "command": "tt.menuShow",
+          "group": "navigation"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "tt.getFilePath",
+          "group": "navigation"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "tomHubTools",
+          "title": "Tom工具栏",
+          "icon": "resources/menus/tt-menu.svg"
+        }
+      ]
+    },
+    "views": {
+      "tomHubTools": [
+        {
+          "id": "tomHubExplorer",
+          "name": "文档列表"
+        }
+      ]
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitee.com/lauset/tomhub-tools-plugin"
+  },
+  "homepage": "https://gitee.com/lauset/tomhub-tools-plugin#tom-tools",
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "tslint --project tsconfig.json -e src/*.d.ts -t verbose",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.4",
+    "@types/lodash": "^4.14.170",
+    "@types/mocha": "^9.0.0",
+    "@types/needle": "^2.5.2",
+    "@types/node": "14.x",
+    "@types/vscode": "^1.62.0",
+    "@typescript-eslint/eslint-plugin": "^5.1.0",
+    "@typescript-eslint/parser": "^5.1.0",
+    "@vscode/test-electron": "^1.6.2",
+    "eslint": "^8.2.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-define-config": "1.1.2",
+    "eslint-plugin-prettier": "4.0.0",
+    "glob": "^7.1.7",
+    "mocha": "^9.1.3",
+    "tslint": "^6.1.3",
+    "typescript": "^4.4.4"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "needle": "^3.0.0",
+    "request": "^2.88.2"
+  }
+}
