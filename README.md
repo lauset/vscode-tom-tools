@@ -1,7 +1,7 @@
 # Tom Tools
 
 <p align="center">
-  <img src="https://gitee.com/lauset/tomhub-tools-plugin/raw/master/resources/tt-icon.png" alt="">
+  <img src="./resources/tt-icon.png" alt="">
 </p>
 
 一款包含多种功能的工具插件，就工具插件呗。
@@ -27,19 +27,19 @@
    - 自定义命令列表（待开发）
 
 <p align="center">
-  <img src="https://gitee.com/lauset/tomhub-tools-plugin/raw/master/data/screenshots/tt01.png" alt="">
+  <img src="./data/screenshots/tt01.png" alt="">
 </p>
 
 <p align="center">
-  <img src="https://gitee.com/lauset/tomhub-tools-plugin/raw/master/data/screenshots/tt02.png" alt="">
+  <img src="./data/screenshots/tt02.png" alt="">
 </p>
 
 <p align="center">
-  <img src="https://gitee.com/lauset/tomhub-tools-plugin/raw/master/data/screenshots/tt03.png" alt="">
+  <img src="./data/screenshots/tt03.png" alt="">
 </p>
 
 <p align="center">
-  <img src="https://gitee.com/lauset/tomhub-tools-plugin/raw/master/data/screenshots/tt04.png" alt="">
+  <img src="./data/screenshots/tt04.png" alt="">
 </p>
 
 <br/>
@@ -49,7 +49,7 @@
 **注意事项**
 
 <p align="center">
-  <img src="https://gitee.com/lauset/tomhub-tools-plugin/raw/master/data/screenshots/warn01.png" alt="">
+  <img src="./data/screenshots/warn01.png" alt="">
 </p>
 
 VSCode 会进行后台检测磁盘上的样式之类的文件是否已更改，更改了样式之类的插件都会有一下提示 **安装似乎已损坏** ，不再提示即可
@@ -104,7 +104,7 @@ VSCode 会进行后台检测磁盘上的样式之类的文件是否已更改，�
 
 >**文档列表数据**
 
-文档列表中的数据目前储存在远程仓库 `tomhub-tools-plugin/data` 目录下的 `weburls.josn` 文件中，默认会使用远程仓库的数据。
+文档列表中的数据目前储存在远程仓库 `根目录/data` 目录下的 `weburls.josn` 文件中，默认会使用远程仓库的数据。
 
 单个网链数据项包含的字段说明如下
 
@@ -187,13 +187,13 @@ interface IProblem {
 ## 远程仓库
 
 > - 远程仓库通过 gitee 维护，每周会更新一些新的内容
-> - 远程仓库地址 [tomhub-tools-plugin](https://gitee.com/lauset/tomhub-tools-plugin)
+> - 远程仓库地址 [vscode-tom-tools](https://github.com/lauset/vscode-tom-tools/issues)
 
 <br/>
 
 ## 问题意见
 
-插件的使用过程中如果发现了任何的 `bug` 或者有任何建议, 请提交 issues to 到 GitHub Repo [https://gitee.com/lauset/tomhub-tools-plugin/issues](https://gitee.com/lauset/tomhub-tools-plugin/issues)
+插件的使用过程中如果发现了任何的 `bug` 或者有任何建议, 请提交 issues to 到 GitHub Repo [issues](https://github.com/lauset/vscode-tom-tools/issues)
 
 <br/>
 

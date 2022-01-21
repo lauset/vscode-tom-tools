@@ -1,8 +1,8 @@
 {
-  "name": "tomhub-tools",
+  "name": "vscode-tom-tools",
   "displayName": "Tom Tools",
   "description": "Convenience tools",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "engines": {
     "vscode": "^1.62.0"
   },
@@ -160,9 +160,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://gitee.com/lauset/tomhub-tools-plugin"
+    "url": "https://github.com/lauset/vscode-tom-tools"
   },
-  "homepage": "https://gitee.com/lauset/tomhub-tools-plugin#tom-tools",
+  "homepage": "https://github.com/lauset/vscode-tom-tools#tom-tools",
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
