@@ -122,7 +122,7 @@ new Vue({
     },
     openUrlInBrowser() {
       callVscode(
-        { cmd: 'openUrlInBrowser', url: 'https://gitee.com/lauset/tomhub-tools-plugin' },
+        { cmd: 'openUrlInBrowser', url: 'https://github.com/lauset/vscode-tom-tools' },
         () => {
           this.alert('打开成功！')
         })

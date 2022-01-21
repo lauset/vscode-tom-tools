@@ -53,7 +53,7 @@ export async function getList(): Promise<IProblem[]> {
     // 使用 httpGet 方式请求文档列表数据
     if (urlsEnable && urlsPath && urlsFile) {
       // 获取当前插件的文件路径，并默认给给文档配置文件路径
-      // const tt: any = vscode.extensions.getExtension('lauset.tomhub-tools')
+      // const tt: any = vscode.extensions.getExtension('lauset.vscode-tom-tools')
       // console.log(tt.extensionPath)
       // const extensionPath = `${tt.extensionPath}\\data`
       // vscode.workspace.getConfiguration().update(key2, extensionPath, true)
