@@ -1,4 +1,5 @@
 import * as vscode from 'vscode'
+import * as path from 'path'
 import { keyConfig } from '../tomjs/ttenum'
 
 export function helloWorld(context: vscode.ExtensionContext) {
@@ -10,8 +11,8 @@ export function helloWorld(context: vscode.ExtensionContext) {
 
 export function setDefaultPath(time: number) {
   console.log(`启动时间：${time}`)
-  const tt: any = vscode.extensions.getExtension('lauset.vscode-tom-tools')
-  const path = `${tt.extensionPath}\\data`
-  console.log(`文档配置：${path}`)
-  vscode.workspace.getConfiguration().update(keyConfig.urlsPath, path, true)
+  const tt: any = vscode.extensions.getExtension('lauset.tomhub-tools')
+  const pathDir = path.join(tt.extensionPath, 'data')
+  console.log(`文档配置：${pathDir}`)
+  vscode.workspace.getConfiguration().update(keyConfig.urlsPath, pathDir, true)
 }
