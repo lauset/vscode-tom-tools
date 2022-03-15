@@ -1,8 +1,8 @@
 {
-  "name": "vscode-tom-tools",
+  "name": "tomhub-tools",
   "displayName": "Tom Tools",
   "description": "Convenience tools",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "engines": {
     "vscode": "^1.62.0"
   },
