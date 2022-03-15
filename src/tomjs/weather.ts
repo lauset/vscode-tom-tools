@@ -3,6 +3,7 @@ import * as path from 'path'
 import util from '../utils'
 import { getWebViewContent, invokeCallback } from '../utils/webview'
 import { getList, addDataToLocal, delDataToLocal } from '../menus/TomHubList'
+import { THTreeDataProvider } from '../menus/UrlsTreeDataProvider'
 
 const key1 = 'tomtools.urls.enable'
 const key2 = 'tomtools.urls.path'
@@ -133,6 +134,10 @@ const messageHandler: any = {
     if (!url) return
     util.openUrlInBrowser(url)
     invokeCallback(global.panel, message, { code: 0, text: '成功' })
+  },
+  // 刷新左侧工具栏
+  refreshTree() {
+    THTreeDataProvider.refresh()
   }
 }
 

@@ -46,6 +46,7 @@ new Vue({
     localFlag: false, 
     addFlag: true,
     addUrls: {},
+    delData: {},
     searchData: {
       pageNo: 1,
       pageSize: 5,
@@ -127,6 +128,9 @@ new Vue({
           this.alert('打开成功！')
         })
     },
+    refreshTree() {
+      callVscode({ cmd: 'refreshTree' }, null)
+    },
     // 分页
     changePage(pageNo) {
       let currentPage = this.searchData.pageNo
@@ -171,9 +175,14 @@ new Vue({
           this.changePage(this.searchData.pageNo)
         }
         this.alert(resp.message)
+        this.refreshTree()
       })
     },
+    setDelData(data) {
+      this.delData = data
+    },
     delUrls(data) {
+      data = this.delData
       callVscode({ cmd: 'delUrlsData', data }, 
       resp => {
         if (resp.code === 200) {
@@ -185,6 +194,7 @@ new Vue({
           this.changePage(this.searchData.pageNo)
         } 
         this.alert(resp.message)
+        this.refreshTree()
       })
     }
   }

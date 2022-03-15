@@ -221,21 +221,22 @@
     说明：VSCode中的WebView和普通网页几乎没有任何差别，唯一差别在于它多了一个acquireVsCodeApi方法，利用这个方法可以和插件本身进行消息通信，所以插件能实现什么功能，Webview也可以实现什么功能。
   </p> -->
     <p v-if="!urlsConfig.urlsEnable" class="alert alert-danger" style="width: 65%">
-      注意：您还未启用文档列表数据的本地配置文件，目前使用的是远程网络上的文档列表数据<br />
-      如果想启用本地化，请配置 "tomtools.urls.enable": true<br />
-      然后重新打开此页面
+      注意：您还'未启用'文档列表数据的本地配置文件，目前使用的是远程GIT网络仓库中的配置文件 <br/>
+      想使用本地配置文件，vscode 设置中请设置 "tomtools.urls.enable": true <br/>
+      可执行左侧 Tom 工具栏的 '命令' > '文档配置菜单' 选项进行可视化配置 <br/>
+      配置完成后重新打开此页面即可修改内容
     </p>
     <p v-else class="alert alert-warning" style="width: 65%">
-      说明：下方展示了目前您本地配置中的文档数据，修改可点击下方按钮在
-      localurls.json 中进行编辑<br />
-      必须确保以下两项配置不为空，然后重新打开此页面<br />
-      本地配置文件路径：
-      <i v-if="urlsConfig.urlsPath">{{urlsConfig.urlsPath}}</i>
-      <b class="warning" v-else>请配置 "tomtools.urls.path": "你的本地配置文件所在文件夹的路径"</b>
+      说明：下方展示了您本地配置文件中的数据，可点击下方按钮在 localurls.json 中进行编辑<br />
+      也可以点击新增按钮进行新增网址操作<br/>
+      注意：请确保 vscode 设置中以下两项配置不为空<br />
+      1. 本地配置文件路径："tomtools.urls.path"<br/>
+      <i v-if="urlsConfig.urlsPath"> 目前值：{{urlsConfig.urlsPath}}</i>
+      <b class="warning" v-else> !!!请配置 "tomtools.urls.path": "你的本地配置文件所在文件夹的路径"</b>
       <br />
-      本地配置文件名称：
-      <i v-if="urlsConfig.urlsFile">{{urlsConfig.urlsFile}}</i>
-      <b v-else>请配置 "tomtools.urls.file":
+      2. 本地配置文件名称："tomtools.urls.file"<br/>
+      <i v-if="urlsConfig.urlsFile"> 目前值：{{urlsConfig.urlsFile}}</i>
+      <b v-else> !!!请配置 "tomtools.urls.file":
         "你的本地配置文件名称，带json后缀的那种"</b>
     </p>
     <button v-show="localFlag" type="button" class="btn btn-primary" data-bs-toggle="offcanvas"
@@ -268,7 +269,7 @@
             @click="updateOpen(l)"
           >修改</button> -->
             <button v-show="localFlag" type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
-              data-bs-target="#exampleModal">
+              data-bs-target="#exampleModal" @click="setDelData(l)">
               删除
             </button>
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -307,9 +308,9 @@
       <div class="offcanvas-body">
         <form class="was-validated">
           <div class="mb-3">
-            <label for="validationServer01" class="form-label">网链ID（不可重复，可用于排序）</label>
+            <label for="validationServer01" class="form-label">网链ID（大于0，不可重复，可用于排序）</label>
             <input type="text" class="form-control" required v-model="addUrls.id" />
-            <div class="invalid-feedback">不能为空哦</div>
+            <div class="invalid-feedback">一定要大于0哦</div>
           </div>
           <div class="mb-3">
             <label for="validationServer01" class="form-label">网链名称（例如：百度）</label>
@@ -367,6 +368,7 @@
         <div class="col-sm-6">
           <a href="javascript:;" class="btn btn-sm btn-outline-warning" @click="openFileInFinder">在文件夹中浏览</a>
           <a href="javascript:;" class="btn btn-sm btn-danger" @click="openFileInVscode">在 localurls.json 中编辑</a>
+          <!-- <a href="javascript:;" class="btn btn-sm btn-primary" @click="refreshTree">刷新左侧工具栏</a> -->
         </div>
       </div>
     </form>
