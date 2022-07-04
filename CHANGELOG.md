@@ -1,13 +1,18 @@
 ## 更新日志
 
-### 正在开发
+### 目前问题
 
-- 自定义欢迎页UI优化
-- 疫情历史记录模块
-- 本地文档列表配置文件项的可视化操作
+- 禁止Iframe嵌入的网页无法作为文档
 - ...
 
 ### 更新记录
+
+#### ver 1.1.3 (2022/07/03)
+
+重构
+
+- 重写部分命令注册代码
+- 去除天气疫情首页，改为自定义链接首页
 
 
 #### ver 1.1.2 (2022/03/15)
@@ -65,10 +70,10 @@
 
 新增配置
 
-- tomtools.urls.enable 启用本地文档配置文件
+- tomtools.urls.enabled 启用本地文档配置文件
 - tomtools.urls.path 本地文档配置文件目录
 - tomtools.urls.file 本地文档配置文件名称
-- tomtools.image.enable 启用侧栏菜单背景图
+- tomtools.image.enabled 启用侧栏菜单背景图
 - tomtools.image.path 侧栏菜单背景图路径
 - tomtools.image.opacity 侧栏菜单背景图透明度
 
