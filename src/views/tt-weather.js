@@ -37,7 +37,6 @@ window.addEventListener('message', (event) => {
 
 new Vue({
   el: '#app-weather',
-  // vuetify: new Vuetify(),
   data: {
     projectName: '加载中',
     urlsConfig: {},
@@ -86,7 +85,7 @@ new Vue({
   watch: {
     urlsConfig: {
       handler: function() {
-        if (this.urlsConfig.urlsEnable &&
+        if (this.urlsConfig.urlsEnabled &&
           this.urlsConfig.urlsPath && 
           this.urlsConfig.urlsFile) {
             this.localFlag = true
