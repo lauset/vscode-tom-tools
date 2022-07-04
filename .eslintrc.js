@@ -17,11 +17,10 @@ module.exports = defineConfig({
   globals: {
     jest: 'readonly'
   },
-  plugins: ['@typescript-eslint', 'prettier'],
+  plugins: ['@typescript-eslint'],
   extends: [
     'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'prettier'
+    'plugin:@typescript-eslint/recommended'
   ],
   overrides: [
     {
@@ -47,6 +46,10 @@ module.exports = defineConfig({
     'no-empty': ['error', { allowEmptyCatch: true }],
     'no-void': 'error',
     'no-var-requires': 'off',
+    'no-unused-vars': [0, {
+      'vars': 'local',
+      'args': 'none'
+    }],
     // 'no-console': ['warn', { allow: ['error'] }],
     'no-restricted-syntax': ['error', 'LabeledStatement', 'WithStatement'],
     'prefer-const': [
@@ -69,18 +72,18 @@ module.exports = defineConfig({
     '@typescript-eslint/consistent-type-imports': [
       'error',
       { disallowTypeAnnotations: false }
-    ],
-    // prettier
-    'prettier/prettier': [
-      'error',
-      {
-        semi: false,
-        singleQuote: true,
-        printWidth: 80,
-        trailingComma: 'none',
-        endOfLine: 'auto',
-        parser: 'flow'
-      }
     ]
+    // prettier
+    // 'prettier/prettier': [
+    //   'error',
+    //   {
+    //     semi: false,
+    //     singleQuote: true,
+    //     printWidth: 80,
+    //     trailingComma: 'none',
+    //     endOfLine: 'auto',
+    //     parser: 'flow'
+    //   }
+    // ]
   }
 })
