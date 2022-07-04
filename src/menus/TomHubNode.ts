@@ -4,8 +4,7 @@ import type { IProblem, ProblemState } from '../tomjs/ttenum'
 
 export class TomHubNode {
 
-  // eslint-disable-next-line prettier/prettier
-  constructor(private data: IProblem, private isProblemNode: boolean = true) { }
+  constructor(private data: IProblem) { }
 
   public get isUrl(): boolean {
     return this.data.isUrl
@@ -26,7 +25,7 @@ export class TomHubNode {
   public get id(): string {
     return this.data.id
   }
-  
+
   public get url(): string {
     return this.data.url
   }

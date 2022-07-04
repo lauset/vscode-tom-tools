@@ -135,10 +135,23 @@ export enum DescriptionConfiguration {
 
 export enum keyConfig {
   owner = 'tomtools.owner',
-  welcome = 'tomtools.welcome',
+  welcome = 'tomtools.welcome.enabled',
+  welcomeUrl = 'tomtools.welcome.url',
+  urlsEnabled = 'tomtools.urls.enabled',
   urlsPath = 'tomtools.urls.path',
   urlsFile = 'tomtools.urls.file',
-  urlsEnable = 'tomtools.urls.enable'
+  imgEnabled = 'tomtools.image.enabled',
+  imgPath = 'tomtools.image.path',
+  imgOpacity = 'tomtools.image.opacity'
+}
+
+export enum keyCommands {
+  hello = 'tt.hello',
+  welcome = 'tt.welcome',
+  doclist = 'tt.doc',
+  menuShow = 'tt.menuShow',
+  filePath = 'tt.getFilePath',
+  config = 'tt.configShow',
 }
 
 export const hasInited = 'tt.hasInited'

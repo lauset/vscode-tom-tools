@@ -1,7 +1,9 @@
 import * as vscode from 'vscode'
 import util from '../utils'
 import { httpFetch } from '../utils/request'
-import { getWebViewContent, invokeCallback } from '../utils/webview'
+import { keyConfig as kc, keyCommands as kcs } from './ttenum'
+import { getIframeHtml } from './ttiframe'
+import { invokeCallback } from '../utils/webview'
 
 /**
  * 存放所有消息回调函数，根据 message.cmd 来决定调用哪个方法
@@ -11,7 +13,7 @@ const messageHandler: any = {
     const result = vscode.workspace.getConfiguration().get(message.key)
     invokeCallback(global.panel, message, result)
   },
-  setConfig(global: any, message: any) {
+  setConfig(_global: any, message: any) {
     // 写入配置文件，注意，默认写入工作区配置，而不是用户配置，最后一个true表示写入全局用户配置
     vscode.workspace.getConfiguration().update(message.key, message.value, true)
     // util.showInfo('修改成功！')
@@ -99,20 +101,31 @@ const messageHandler: any = {
 
 export default function (context: vscode.ExtensionContext) {
   context.subscriptions.push(
-    vscode.commands.registerCommand('tt.welcome', function (uri) {
-      const panel = vscode.window.createWebviewPanel(
-        'ttWelcome', // viewType
-        'TomHub欢迎页', // 视图标题
-        vscode.ViewColumn.One, // 显示在编辑器的哪个部位
-        {
-          enableScripts: true // 启用JS，默认禁用
-        }
-      )
-      const global = { panel }
-      panel.webview.html = getWebViewContent(
-        context,
-        'src/views/tt-welcome/tt-welcome.html'
-      )
+    vscode.commands.registerCommand(kcs.welcome, function () {
+      let viewTitle = 'Welcome'
+      const cfg = vscode.workspace.getConfiguration()
+      const welcomeUrl = cfg.get(kc.welcomeUrl)
+      const owner = cfg.get(kc.owner)
+      const local = (welcomeUrl == undefined || `${welcomeUrl}` === '')
+      if (!local) viewTitle = `${owner}的首页`
+      let panel
+      let global
+      if (local) {
+        vscode.window.showInformationMessage('Tom Tools: 还没有设置欢迎页URL哦!')
+        // panel.webview.html = 
+        //   getIframeHtml('https://code.visualstudio.com/docs') 
+      } else {
+        panel = vscode.window.createWebviewPanel(
+          'viewType', viewTitle,
+          vscode.ViewColumn.One,
+          {
+            enableScripts: true,
+            retainContextWhenHidden: true
+          }
+        )
+        global = { panel }
+        panel.webview.html = getIframeHtml(`${welcomeUrl}`)
+      }
       panel.webview.onDidReceiveMessage(
         (message) => {
           if (messageHandler[message.cmd]) {
@@ -126,10 +139,7 @@ export default function (context: vscode.ExtensionContext) {
       )
     })
   )
-
-  const key = 'tomtools.welcome'
   // 如果设置里面开启了欢迎页显示，启动欢迎页
-  if (vscode.workspace.getConfiguration().get(key)) {
-    vscode.commands.executeCommand('tt.welcome')
-  }
+  if (vscode.workspace.getConfiguration().get(kc.welcome)) 
+    vscode.commands.executeCommand(kcs.welcome)
 }

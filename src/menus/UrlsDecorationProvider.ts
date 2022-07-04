@@ -1,14 +1,13 @@
 import { URLSearchParams } from 'url'
-import type { 
-  FileDecoration, 
-  FileDecorationProvider, 
-  ProviderResult, 
-  Uri, 
-  WorkspaceConfiguration } from 'vscode'
-import { ThemeColor, workspace } from 'vscode'
+import type {
+  FileDecoration,
+  FileDecorationProvider,
+  ProviderResult,
+  Uri
+} from 'vscode'
+import { ThemeColor } from 'vscode'
 
 export class UrlsDecorationProvider implements FileDecorationProvider {
-  // eslint-disable-next-line prettier/prettier
   private readonly DIFFICULTY_BADGE_LABEL: { [key: string]: string } = {
     Documents: 'Documents',
     Tools: 'Tools',
@@ -39,10 +38,12 @@ export class UrlsDecorationProvider implements FileDecorationProvider {
     }
   }
 
-  private isDifficultyBadgeEnabled(): boolean {
-    const configuration: WorkspaceConfiguration = workspace.getConfiguration()
-    return configuration.get<boolean>('tt.colorOverride', false)
-  }
+  // private isDifficultyBadgeEnabled(): boolean {
+  //   const configuration: WorkspaceConfiguration = 
+  //     workspace.getConfiguration()
+  //   return configuration.get<boolean>('tt.colorOverride', false)
+  // }
 }
 
-export const THDecorationProvider: UrlsDecorationProvider = new UrlsDecorationProvider()
+export const THDecorationProvider: UrlsDecorationProvider =
+  new UrlsDecorationProvider()

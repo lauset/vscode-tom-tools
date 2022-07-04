@@ -1,17 +1,12 @@
 import * as needle from 'needle'
-// import progress from 'request-progress'
-// import { requestMsg } from './message'
-// import { deflateRaw, InputType } from 'zlib'
-// import { getProxyInfo } from './index'
-// import fs from 'fs'
 
 const debugRequest = true
 const requestMsg = {
-  fail: '请求异常😮，可以多试几次',
-  unachievable: '哦No😱...接口无法访问了！',
+  fail: '请求失败，可重新尝试',
+  unachievable: '接口无法访问了',
   timeout: '请求超时',
   notConnectNetwork: '无法连接到服务器',
-  cancelRequest: '取消http请求'
+  cancelRequest: '取消请求'
 }
 const defaultHeaders = {
   'User-Agent':
@@ -84,7 +79,7 @@ const buildHttpPromose = (url: string, options: any) => {
       if (obj.isCancelled) obj.cancelHttp()
     })
   })
-  obj.cancelHttp = () => {
+  obj.cancelHttp = (): any => {
     if (!obj.requestObj) return (obj.isCancelled = true)
     cancelHttp(obj.requestObj)
     obj.requestObj = null
@@ -125,9 +120,7 @@ export const httpFetch = (url: string, options: any = { method: 'get' }) => {
  * @param {*} index
  */
 export const cancelHttp = (requestObj: any) => {
-  // console.log(requestObj)
   if (!requestObj) return
-  // console.log('cancel:', requestObj)
   if (!requestObj.abort) return
   requestObj.abort()
 }
@@ -280,16 +273,6 @@ export const httpJsonp = (url: string, options: any, callback: any) => {
   )
 }
 
-// const handleDeflateRaw = (data: any) =>
-//   new Promise((resolve, reject) => {
-//     deflateRaw(data, (err, buf) => {
-//       if (err) return reject(err)
-//       resolve(buf)
-//     })
-//   })
-
-const regx = /(?:\d\w)+/g
-
 const fetchData = async (
   url: string,
   method: string,
@@ -316,7 +299,6 @@ const fetchData = async (
       method,
       headers: Object.assign({}, defaultHeaders, headers),
       timeout,
-      //   proxy: getProxyInfo(),
       json: format === 'json'
     },
     (err: any, resp: any, body: any) => {

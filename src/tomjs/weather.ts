@@ -4,10 +4,7 @@ import util from '../utils'
 import { getWebViewContent, invokeCallback } from '../utils/webview'
 import { getList, addDataToLocal, delDataToLocal } from '../menus/TomHubList'
 import { THTreeDataProvider } from '../menus/UrlsTreeDataProvider'
-
-const key1 = 'tomtools.urls.enable'
-const key2 = 'tomtools.urls.path'
-const key3 = 'tomtools.urls.file'
+import { keyConfig as kc, keyCommands as kcs } from './ttenum'
 
 /**
  * 存放所有消息回调函数，根据 message.cmd 来决定调用哪个方法
@@ -31,21 +28,21 @@ const messageHandler: any = {
   },
   // 获取文档列表配置文件的有关配置信息
   getUrlsConfig(global: any, message: any) {
-    const urlsEnable = vscode.workspace.getConfiguration().get(key1)
-    const urlsPath = vscode.workspace.getConfiguration().get(key2)
-    const urlsFile = vscode.workspace.getConfiguration().get(key3)
+    const urlsEnabled = vscode.workspace.getConfiguration().get(kc.urlsEnabled)
+    const urlsPath = vscode.workspace.getConfiguration().get(kc.urlsPath)
+    const urlsFile = vscode.workspace.getConfiguration().get(kc.urlsFile)
     invokeCallback(global.panel, message, {
-      urlsEnable,
+      urlsEnabled,
       urlsPath,
       urlsFile
     })
   },
   // 弹出提示
-  alert(global: any, message: any) {
+  alert(_global: any, message: any) {
     util.showInfo(message.info)
   },
   // 显示错误提示
-  error(global: any, message: any) {
+  error(_global: any, message: any) {
     util.showError(message.info)
   },
   // 获取工程名
@@ -57,14 +54,14 @@ const messageHandler: any = {
     )
   },
   openFileInFinder(global: any, message: any) {
-    const urlsEnable = vscode.workspace.getConfiguration().get(key1)
+    const urlsEnabled = vscode.workspace.getConfiguration().get(kc.urlsEnabled)
     const urlsPath: string | undefined = vscode.workspace
       .getConfiguration()
-      .get(key2)
-    if (!urlsEnable) {
+      .get(kc.urlsPath)
+    if (!urlsEnabled) {
       invokeCallback(global.panel, message, {
         code: 500,
-        message: '请先启用配置 tomtools.urls.enable: true'
+        message: '请先启用配置 tomtools.urls.enabled: true'
       })
       return
     }
@@ -94,17 +91,17 @@ const messageHandler: any = {
   },
   // 打开配置中定义的文件
   openFileInVscode(global: any, message: any) {
-    const urlsEnable = vscode.workspace.getConfiguration().get(key1)
+    const urlsEnabled = vscode.workspace.getConfiguration().get(kc.urlsEnabled)
     const urlsPath: string | undefined = vscode.workspace
       .getConfiguration()
-      .get(key2)
+      .get(kc.urlsPath)
     const urlsFile: string | undefined = vscode.workspace
       .getConfiguration()
-      .get(key3)
-    if (!urlsEnable) {
+      .get(kc.urlsFile)
+    if (!urlsEnabled) {
       invokeCallback(global.panel, message, {
         code: 500,
-        message: '请先启用配置 tomtools.urls.enable: true'
+        message: '请先启用配置 tomtools.urls.enabled: true'
       })
       return
     }
@@ -145,7 +142,7 @@ export default function (context: vscode.ExtensionContext) {
   // 注册命令，可以给命令配置快捷键或者右键菜单
   // 回调函数参数uri：当通过资源管理器右键执行命令时会自动把所选资源URI带过来，当通过编辑器中菜单执行命令时，会将当前打开的文档URI传过来
   context.subscriptions.push(
-    vscode.commands.registerCommand('tt.weather', function (uri) {
+    vscode.commands.registerCommand(kcs.doclist, function (uri) {
       // 工程目录一定要提前获取，因为创建了webview之后activeTextEditor会不准确
       const projectPath = util.getProjectPath(uri)
       if (!projectPath) return
@@ -161,7 +158,7 @@ export default function (context: vscode.ExtensionContext) {
       const global = { projectPath, panel }
       panel.webview.html = getWebViewContent(
         context,
-        'src/views/tt-weather/tt-weather.html'
+        'src/views/tt-weather.html'
       )
       panel.webview.onDidReceiveMessage(
         (message) => {

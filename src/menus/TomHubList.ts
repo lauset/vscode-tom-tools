@@ -2,8 +2,8 @@ import * as vscode from 'vscode'
 import * as fs from 'fs'
 import * as path from 'path'
 import type { IProblem } from '../tomjs/ttenum'
-import { ProblemState, UserStatus, Category } from '../tomjs/ttenum'
-import { httpGet, httpFetch } from '../utils/request'
+// import { ProblemState } from '../tomjs/ttenum'
+import { httpGet } from '../utils/request'
 import { keyConfig as kc } from '../tomjs/ttenum'
 
 const errorUrls = {
@@ -28,7 +28,7 @@ const errorUrls = {
  */
 export async function getList(): Promise<IProblem[]> {
   // 用户是否开启本地文档配置文件的使用
-  const urlsEnable = vscode.workspace.getConfiguration().get(kc.urlsEnable)
+  const urlsEnabled = vscode.workspace.getConfiguration().get(kc.urlsEnabled)
   const urlsPath: string | undefined = vscode.workspace
     .getConfiguration()
     .get(kc.urlsPath)
@@ -51,9 +51,10 @@ export async function getList(): Promise<IProblem[]> {
     // }
 
     // 使用 httpGet 方式请求文档列表数据
-    if (urlsEnable && urlsPath && urlsFile) {
+    if (urlsEnabled && urlsPath && urlsFile) {
       // 获取当前插件的文件路径，并默认给给文档配置文件路径
-      // const tt: any = vscode.extensions.getExtension('lauset.vscode-tom-tools')
+      // const tt: any = 
+      //   vscode.extensions.getExtension('lauset.vscode-tom-tools')
       // console.log(tt.extensionPath)
       // const extensionPath = `${tt.extensionPath}\\data`
       // vscode.workspace.getConfiguration().update(key2, extensionPath, true)
@@ -84,7 +85,7 @@ export async function getList(): Promise<IProblem[]> {
  * @returns
  */
 async function getListFromLocal(url: string, bkurl: string) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     fs.readFile(url, 'utf8', (err, data) => {
       if (err) {
         resolve(errorUrls)
@@ -105,8 +106,8 @@ async function getListFromLocal(url: string, bkurl: string) {
  * @returns
  */
 async function getListFromGitee(url: string) {
-  return new Promise((resolve, reject) => {
-    httpGet(url, {}, (err: any, resp: any, body: any) => {
+  return new Promise((resolve) => {
+    httpGet(url, {}, (err: any, _resp: any, body: any) => {
       if (!err && !body.list) err = new Error(JSON.stringify(body))
       if (err) {
         resolve(errorUrls)
@@ -211,21 +212,21 @@ export async function delDataToLocal(urlsData: any): Promise<any> {
   })
 }
 
-function parseState(stateOutput: string): ProblemState {
-  return ProblemState.Unknown
-  //   if (!stateOutput) {
-  //     return ProblemState.Unknown
-  //   }
-  //   switch (stateOutput.trim()) {
-  //     case 'v':
-  //     case '✔':
-  //     case '√':
-  //       return ProblemState.AC
-  //     case 'X':
-  //     case '✘':
-  //     case '×':
-  //       return ProblemState.NotAC
-  //     default:
-  //       return ProblemState.Unknown
-  //   }
-}
+// function parseState(stateOutput: string): ProblemState {
+//   return ProblemState.Unknown
+//   if (!stateOutput) {
+//     return ProblemState.Unknown
+//   }
+//   switch (stateOutput.trim()) {
+//     case 'v':
+//     case '✔':
+//     case '√':
+//       return ProblemState.AC
+//     case 'X':
+//     case '✘':
+//     case '×':
+//       return ProblemState.NotAC
+//     default:
+//       return ProblemState.Unknown
+//   }
+// }

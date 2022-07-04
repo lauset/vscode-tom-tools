@@ -1,9 +1,3 @@
-// const fs = require('fs')
-// const os = require('os')
-// const path = require('path')
-// const vscode = require('vscode')
-// const exec = require('child_process').exec
-
 import * as fs from 'fs'
 import * as os from 'os'
 import * as path from 'path'
@@ -201,10 +195,10 @@ const utils = {
     // if (fs.statSync(filePath).isDirectory()) {
     //   exec(`open ${filePath}`)
     // } else {
-      // 如果是文件，要分开处理
-      // const fileName = path.basename(filePath)
-      // exec(`open ${filePath}`)
-      // windows 命令 explorer 打开目录或文件
+    // 如果是文件，要分开处理
+    // const fileName = path.basename(filePath)
+    // exec(`open ${filePath}`)
+    // windows 命令 explorer 打开目录或文件
     //   filePath = path.dirname(filePath)
     //   exec(`explorer ${filePath}`)
     // }
@@ -215,7 +209,7 @@ const utils = {
    * @param {*} text 可选，如果不为空，则选中第一处匹配的对应文字
    */
   openFileInVscode(path: any, text: any) {
-    let options = undefined
+    let options
     if (text) {
       const selection = this.getStrRangeInFile(path, text)
       options = { selection }

@@ -4,12 +4,12 @@ import * as list from './TomHubList'
 import {
   Category,
   defaultProblem,
-  ProblemState,
+  // ProblemState,
+  keyCommands,
   SortingStrategy } from '../tomjs/ttenum'
 import { TomHubNode } from './TomHubNode'
 
 class UrlsNodeManager implements Disposable {
-  // eslint-disable-next-line prettier/prettier
   private urlNodeMap: Map<string, TomHubNode> =
     new Map<string, TomHubNode>()
   private tagSet: Set<string> = new Set<string>()
@@ -36,31 +36,31 @@ class UrlsNodeManager implements Disposable {
       new TomHubNode(Object.assign({}, defaultProblem, {
         id: Category.All,
         name: Category.All
-      }), false),
+      })),
       new TomHubNode(Object.assign({}, defaultProblem, {
         id: Category.Doc,
         name: Category.Doc
-      }), false),
+      })),
       new TomHubNode(Object.assign({}, defaultProblem, {
         id: Category.Tools,
         name: Category.Tools
-      }), false),
+      })),
       new TomHubNode(Object.assign({}, defaultProblem, {
         id: Category.Video,
         name: Category.Video
-      }), false),
+      })),
       new TomHubNode(Object.assign({}, defaultProblem, {
         id: Category.Tags,
         name: Category.Tags
-      }), false),
+      })),
       new TomHubNode(Object.assign({}, defaultProblem, {
         id: Category.Pic,
         name: Category.Pic
-      }), false),
+      })),
       new TomHubNode(Object.assign({}, defaultProblem, {
         id: Category.Cmd,
         name: Category.Cmd
-      }), false)
+      }))
       // 开始新增固定命令行菜单
       // new TomHubNode(Object.assign({}, defaultProblem, {
       //   id: '101',
@@ -134,8 +134,8 @@ class UrlsNodeManager implements Disposable {
       state: 2,
       type: '命令',
       name: '查看欢迎页',
-      url: 'tt.welcome'
-    }), false)
+      url: keyCommands.welcome
+    }))
     const node2 = new TomHubNode(Object.assign({}, defaultProblem, {
       id: '102',
       isCmd: true,
@@ -143,8 +143,8 @@ class UrlsNodeManager implements Disposable {
       state: 2,
       type: '命令',
       name: '查看文档列表',
-      url: 'tt.weather'
-    }), false)
+      url: keyCommands.doclist
+    }))
     const node3 = new TomHubNode(Object.assign({}, defaultProblem, {
       id: '103',
       isCmd: true,
@@ -152,8 +152,8 @@ class UrlsNodeManager implements Disposable {
       state: 2,
       type: '命令',
       name: '文档配置菜单',
-      url: 'tt.configShow'
-    }), false)
+      url: keyCommands.config
+    }))
     return [node1, node2, node3]
   }
 
@@ -164,7 +164,7 @@ class UrlsNodeManager implements Disposable {
       res.push(new TomHubNode(Object.assign({}, defaultProblem, {
         id: `${Category.Tags}.${tag}`,
         name: _.startCase(tag)
-      }), false))
+      })))
     }
     this.sortSubCategoryNodes(res, Category.Tags)
     return res

@@ -4,7 +4,7 @@ import type { TomHubNode } from '../menus/TomHubNode'
 let webviewPanel: WebviewPanel | undefined
 
 export function urlIframe(
-  context: ExtensionContext,
+  _context: ExtensionContext,
   viewColumn: ViewColumn, // 窗口编辑器
   node: TomHubNode
 ) {
@@ -36,7 +36,15 @@ export function urlIframe(
   return webviewPanel
 }
 
-export function getIframeHtml(url: string) {
+export function getIframeHtml(url: string, elements?: string) {
+  if (url) {
+    if (url.indexOf('?') > -1) {
+      url += '&embedded=true'
+    } else {
+      url += '?embedded=true'
+    }
+  }
+  if (!elements) elements = ''
   return `
     <!DOCTYPE html>
     <html lang="en">
@@ -54,6 +62,7 @@ export function getIframeHtml(url: string) {
           .iframeDiv {
             width: 100%;
             height: 100%;
+            border-width: 0;
           }
           .iframe-loader-div {
             width: 50px;
@@ -123,7 +132,6 @@ export function getIframeHtml(url: string) {
           }
         </style>
         </head>
-
         <body>
           <iframe
             id='iframe1'
@@ -146,7 +154,8 @@ export function getIframeHtml(url: string) {
           </div>
           <script type="text/javascript">
             function stateChangeIE(_frame) {
-              if (_frame.readyState == "complete")//state: loading, interactive, complete
+              //state: loading, interactive, complete
+              if (_frame.readyState == "complete")
               {
                 var loader = document.getElementById("LoadDiv");
                 loader.style.display = "none";
@@ -161,6 +170,7 @@ export function getIframeHtml(url: string) {
               _frame.style.display = "block"
             }
           </script>
+          ${elements}
         </body>
     </html>
     `

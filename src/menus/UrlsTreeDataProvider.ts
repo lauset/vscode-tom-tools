@@ -1,18 +1,21 @@
 import * as os from 'os'
 import * as path from 'path'
 import * as vscode from 'vscode'
-import { Category, defaultProblem, ProblemState } from '../tomjs/ttenum'
+import { Category, ProblemState } from '../tomjs/ttenum'
 import { urlsNodeManager } from './UrlsNodeManager'
 import type { TomHubNode } from './TomHubNode'
 
-export class UrlsTreeDataProvider implements vscode.TreeDataProvider<TomHubNode> {
-
+export class UrlsTreeDataProvider
+implements vscode.TreeDataProvider<TomHubNode>
+{
   private context!: vscode.ExtensionContext
 
-  private onDidChangeTreeDataEvent: vscode.EventEmitter<TomHubNode | undefined | null> 
-    = new vscode.EventEmitter<TomHubNode | undefined | null>()
-  // tslint:disable-next-line:member-ordering
-  public readonly onDidChangeTreeData: vscode.Event<any> = this.onDidChangeTreeDataEvent.event
+  private onDidChangeTreeDataEvent: vscode.EventEmitter<
+    TomHubNode | undefined | null
+  > = new vscode.EventEmitter<TomHubNode | undefined | null>()
+
+  public readonly onDidChangeTreeData: vscode.Event<any> =
+    this.onDidChangeTreeDataEvent.event
 
   public initialize(context: vscode.ExtensionContext): void {
     this.context = context
@@ -23,7 +26,9 @@ export class UrlsTreeDataProvider implements vscode.TreeDataProvider<TomHubNode>
     this.onDidChangeTreeDataEvent.fire(null)
   }
 
-  public getTreeItem(element: TomHubNode): vscode.TreeItem | Thenable<vscode.TreeItem> {
+  public getTreeItem(
+    element: TomHubNode
+  ): vscode.TreeItem | Thenable<vscode.TreeItem> {
     const contextValue = element.id.toLowerCase()
     let cmd: vscode.Command | undefined
     let label: string
@@ -42,9 +47,9 @@ export class UrlsTreeDataProvider implements vscode.TreeDataProvider<TomHubNode>
     return {
       label,
       tooltip: this.getSubCategoryTooltip(element),
-      collapsibleState: element.isUrl ? 
-        vscode.TreeItemCollapsibleState.None : 
-        vscode.TreeItemCollapsibleState.Collapsed,
+      collapsibleState: element.isUrl
+        ? vscode.TreeItemCollapsibleState.None
+        : vscode.TreeItemCollapsibleState.Collapsed,
       iconPath: this.parseIconPathFromState(element),
       command: cmd,
       resourceUri: element.uri,
@@ -52,7 +57,9 @@ export class UrlsTreeDataProvider implements vscode.TreeDataProvider<TomHubNode>
     }
   }
 
-  public getChildren(element?: TomHubNode | undefined): vscode.ProviderResult<TomHubNode[]> {
+  public getChildren(
+    element?: TomHubNode | undefined
+  ): vscode.ProviderResult<TomHubNode[]> {
     // if (true) {
     //   return [
     //     new TomHubNode(Object.assign({}, defaultProblem, {
@@ -61,12 +68,12 @@ export class UrlsTreeDataProvider implements vscode.TreeDataProvider<TomHubNode>
     //     }), false)
     //   ]
     // }
-    if (!element) { 
+    if (!element) {
       // Root view
       return urlsNodeManager.getRootNodes()
     } else {
-      switch (element.id) { 
-      // First-level
+      switch (element.id) {
+        // First-level
         case Category.All:
           return urlsNodeManager.getAllNodes()
         case Category.Doc:
@@ -97,52 +104,53 @@ export class UrlsTreeDataProvider implements vscode.TreeDataProvider<TomHubNode>
     switch (element.state) {
       case ProblemState.AC:
         return this.context.asAbsolutePath(
-          path.join('resources/menus', 'blank.png'))
+          path.join('resources/menus', 'blank.png')
+        )
       case ProblemState.NotAC:
         return this.context.asAbsolutePath(
-          path.join('resources/menus', 'tt-cmd-gray.png'))
+          path.join('resources/menus', 'tt-cmd-gray.png')
+        )
       case ProblemState.Unknown:
         return this.context.asAbsolutePath(
-          path.join('resources/menus', 'tt-url.png'))
+          path.join('resources/menus', 'tt-url.png')
+        )
       default:
         return ''
     }
   }
 
   private getSubCategoryTooltip(element: TomHubNode): string {
-    // return '' unless it is a sub-category node
     if (element.id === 'ROOT' || element.id in Category) {
       return ''
     }
     if (element.isUrl) {
-      return [
-        `Title: ${element.name}`
-      ].join(os.EOL)
-    }  
+      return [`Title: ${element.name}`].join(os.EOL)
+    }
 
-    const childernNodes: TomHubNode[] 
-      = urlsNodeManager.getChildrenNodesById(element.id)
+    const childernNodes: TomHubNode[] = urlsNodeManager.getChildrenNodesById(
+      element.id
+    )
 
-    let acceptedNum = 0
-    let failedNum = 0
+    let ac = 0
+    let notAc = 0
     for (const node of childernNodes) {
       switch (node.state) {
         case ProblemState.AC:
-          acceptedNum++
+          ac++
           break
         case ProblemState.NotAC:
-          failedNum++
+          notAc++
           break
         default:
           break
       }
     }
-
-    return [
-      `Title: ${element.name}`,
-      `Total: ${childernNodes.length}`
-    ].join(os.EOL)
+    console.log(`ac num: ${ac}, not ac num ${notAc}`)
+    return [`Title: ${element.name}`, `Total: ${childernNodes.length}`].join(
+      os.EOL
+    )
   }
 }
 
-export const THTreeDataProvider: UrlsTreeDataProvider = new UrlsTreeDataProvider()
+export const THTreeDataProvider: UrlsTreeDataProvider =
+  new UrlsTreeDataProvider()
