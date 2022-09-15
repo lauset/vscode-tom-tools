@@ -207,7 +207,7 @@ interface IUrl {
   "url": "https://cn.vuejs.org/",
   "type": "Documents",
   "tags": ["framework", "vue"]
-},
+}
 ```
 
 操作命令示例：
@@ -221,7 +221,7 @@ interface IUrl {
   "url": "tt.doc",
   "type": "Commands",
   "tags": ["cmd"]
-},
+}
 ```
 
 <br>
@@ -342,7 +342,7 @@ npm install -g vsce
 vsce package --target win32-x64
 ```
 
-pnpm 下操作
+~~pnpm 下操作~~ 待官方修复依赖问题
 
 ```sh
 pnmp i -D vsce

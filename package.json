@@ -39,7 +39,7 @@
         },
         "tomtools.welcome.url": {
           "type": "string",
-          "default": "https://vuejs.org/",
+          "default": "https://cn.vuejs.org/",
           "description": "启动时自定义欢迎页面的URL网址"
         },
         "tomtools.urls.enabled": {
@@ -222,7 +222,6 @@
     "vsce": "^2.11.0"
   },
   "dependencies": {
-    "lodash": "^4.17.21",
     "needle": "^3.1.0"
   }
 }
