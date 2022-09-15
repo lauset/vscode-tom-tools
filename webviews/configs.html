@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>TomTools</title>
+    <link rel="stylesheet" href="../libs/css/output.css" />
+    <style>
+      body.vscode-light .bg-zinc-800{
+        background-color: whitesmoke;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="h-full w-full tt-button-container">
+      <p class="py-2 font-black border-b-2 border-zinc-700">快捷操作</p>
+      <div class="w-full">
+        <a onclick="openDoc()" 
+          class="tt-button bg-zinc-700 p-1 w-5/6 block my-3 mt-4 mx-auto rounded text-center text-white cursor-pointer hover:bg-zinc-600 hover:text-white">
+          文档配置
+        </a>
+        <a onclick="openSearch()" 
+          class="tt-button bg-zinc-700 p-1 w-5/6 block my-3 mx-auto rounded text-center text-white cursor-pointer hover:bg-zinc-600 hover:text-white">
+          快搜配置
+        </a>
+        <a onclick="openWelcome()" 
+          class="tt-button bg-zinc-700 p-1 w-5/6 block my-3 mx-auto rounded text-center text-white cursor-pointer hover:bg-zinc-600 hover:text-white">
+          欢迎页面
+        </a>
+        <a onclick="openMenu()" 
+          class="tt-button bg-zinc-700 p-1 w-5/6 block my-3 mx-auto rounded text-center text-white cursor-pointer hover:bg-zinc-600 hover:text-white">
+          配置菜单
+        </a>
+      </div>
+      <div class="h-4"></div>
+      <p class="py-2 font-black border-b-2 border-zinc-700">欢迎页配置</p>
+      <div class="w-full px-2 text-sm">
+        <div class="my-2">
+          <p>自定义欢迎页路径: </p>
+          <input id="welcomePath" class="bg-zinc-800 border-2 border-zinc-600 mt-2 pl-1 w-full"/>
+        </div>
+        <div>
+          <div class="checkbox">
+            启动时显示自定义欢迎页: 
+            <label>
+              &nbsp;<input id="welcomeEnabled" type="checkbox"> 
+            </label>
+          </div>
+        </div>
+        <a onclick="saveConfig()" 
+          class="tt-button bg-zinc-700 p-1 w-20 block my-2 rounded text-center text-white cursor-pointer hover:bg-zinc-600 hover:text-white">
+          保 存
+        </a>
+      </div>
+    </div>
+    <script src="../libs/js/events.js"></script>
+    <script src="./configs.js"></script>
+  </body>
+</html>

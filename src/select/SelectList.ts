@@ -3,14 +3,8 @@ import * as path from 'path'
 import * as vscode from 'vscode'
 import { CssProvider } from './CssProvider'
 import { Option } from './Option'
-
-/**
- * 右下角弹框提示
- * @param content 提示内容
- */
-function showInfo(content: string): Thenable<string | undefined> {
-  return vscode.window.showInformationMessage(content)
-}
+import { showError, showInfo } from '../utils/message'
+import utils from '../utils'
 
 export class SelectList {
   public static itemList: SelectList | undefined
@@ -174,7 +168,7 @@ export class SelectList {
         break
       case 9:
         // 重新加载窗口，使设置生效
-        vscode.commands.executeCommand('workbench.action.reloadWindow')
+        utils.reloadVscode() 
         break
       case 10:
         // 隐藏设置弹窗
@@ -294,7 +288,7 @@ export class SelectList {
         const isUrl = value.substr(0, 8).toLowerCase() === 'https://'
         if (!fsStatus && !isUrl) {
           vscode.window.showWarningMessage(
-            'The file does not exist! / 无权限访问文件或文件不存在！'
+            'The file does not exist! / 文件可能不存在，请检查重新输入！'
           )
           return false
         }
@@ -436,7 +430,15 @@ export class SelectList {
     }
     // 是否更新背景图
     if (update) {
-      this.updateCss()
+      try {
+        this.updateCss()
+      } catch (error) {
+        const msg = error.message
+        if (msg.startsWith('EACCES: permission denied')) {
+          const cssFile = msg.substr(msg.indexOf('\'') + 1, msg.length - 2)
+          showError(`权限问题,请对该文件授权: '\n${cssFile}'`)
+        }
+      }
     }
     return true
   }

@@ -1,16 +1,16 @@
-import type { Command} from 'vscode'
+import type { Command } from 'vscode'
 import { Uri } from 'vscode'
-import type { IProblem, ProblemState } from '../tomjs/ttenum'
+import type { IUrl, UrlState } from '../common/models'
+import { explorer, keyCommands } from '../common/ttenum'
 
 export class TomHubNode {
-
-  constructor(private data: IProblem) { }
+  constructor(private data: IUrl) {}
 
   public get isUrl(): boolean {
     return this.data.isUrl
   }
 
-  public get IsCmd(): boolean {
+  public get isCmd(): boolean {
     return this.data.isCmd
   }
 
@@ -18,7 +18,7 @@ export class TomHubNode {
     return this.data.name
   }
 
-  public get state(): ProblemState {
+  public get state(): UrlState {
     return this.data.state
   }
 
@@ -49,18 +49,17 @@ export class TomHubNode {
   public get previewCommand(): Command {
     return {
       title: 'Preview Url',
-      command: 'tt.previewUrls',
+      command: keyCommands.preview,
       arguments: [this]
     }
   }
 
   public get uri(): Uri {
     return Uri.from({
-      scheme: 'tomHubTools',
+      scheme: explorer,
       authority: this.isUrl ? 'urls' : 'tree-node',
-      path: `/${this.id}`, // path must begin with slash /
+      path: `/${this.id}`,
       query: `url=${this.url}&type=${this.type}`
     })
   }
-
 }

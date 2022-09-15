@@ -1,36 +1,67 @@
 import * as vscode from 'vscode'
 import * as path from 'path'
-import { keyConfig, keyCommands } from '../tomjs/ttenum'
+import {
+  keyConfig,
+  keyCommands,
+  tomhub,
+  configExplorer
+} from '../common/ttenum'
 import { SelectList } from '../select/SelectList'
+import { showInfo } from '../utils/message'
+import utils from '../utils'
 
-const cmdHelloWorld = () => {
-  vscode.window.showInformationMessage('你好鸭!')
+const cmdSo = (textEditor) => {
+  const text = textEditor.document.getText(textEditor.selection)
+  let url = vscode.workspace.getConfiguration().get<string>(keyConfig.searchUrl)
+  if (!url || url === '%s') url = 'https://www.baidu.com/s?wd=%s'
+  const rurl = url.replace('%s', text)
+  utils.openUrlInBrowser(rurl)
 }
 
 const cmdMenuShow = () => {
-  vscode.window.showInformationMessage('你点我干啥，我长得很帅吗？')
+  showInfo('Tom Tools已经启用了!')
 }
 
-const cmdGetFilePath = (uri) => {
-  vscode.window.showInformationMessage(`路径：${uri ? uri.path : '空'}`)
+const cmdGetFilePath = async (uri) => {
+  const msg = `Path: ${uri ? uri.path : 'None'}`
+  const selection = await vscode.window.showInformationMessage(
+    msg,
+    'Open In OS',
+    'Close'
+  )
+  if (selection !== undefined) {
+    if (selection === 'Open In OS') {
+      utils.openFileInFinder(uri.path)
+    }
+  }
 }
 
 export function initCmds(context: vscode.ExtensionContext) {
   context.subscriptions.push(
-    vscode.commands.registerCommand(keyCommands.hello, () => cmdHelloWorld),
-    vscode.commands.registerCommand(keyCommands.menuShow, () => cmdMenuShow),
-    vscode.commands.registerCommand(keyCommands.filePath, () => cmdGetFilePath),
-    vscode.commands.registerCommand(keyCommands.config, () => {
+    vscode.commands.registerTextEditorCommand(keyCommands.so, (textEditor) =>
+      cmdSo(textEditor)
+    ),
+    vscode.commands.registerCommand(keyCommands.show, () => cmdMenuShow()),
+    vscode.commands.registerCommand(keyCommands.filePath, (uri) =>
+      cmdGetFilePath(uri)
+    ),
+    vscode.commands.registerCommand(keyCommands.menu, () =>
       SelectList.initList()
-    }),
+    )
   )
 }
 
-export function setDefaultPath(time: number) {
-  console.log(`启动时间：${time}`)
-  const tt: any = vscode.extensions.getExtension('lauset.tomhub-tools')
-  const pathDir = path.join(tt.extensionPath, 'data')
-  console.log(pathDir)
-  console.log(`文档配置：${pathDir}`)
-  vscode.workspace.getConfiguration().update(keyConfig.urlsPath, pathDir, true)
+export function initPath(time: number) {
+  console.log(`启动时间：${new Date()} ${time}`)
+  const tt: any = vscode.extensions.getExtension(tomhub)
+  const uPath = vscode.workspace.getConfiguration().get(keyConfig.urlsPath)
+  const sPath = vscode.workspace.getConfiguration().get(keyConfig.searchPath)
+  const dir = path.join(tt.extensionPath, configExplorer)
+  console.log(`本地配置文件路径：${dir}`)
+  if (!uPath) {
+    vscode.workspace.getConfiguration().update(keyConfig.urlsPath, dir, true)
+  }
+  if (!sPath) {
+    vscode.workspace.getConfiguration().update(keyConfig.searchPath, dir, true)
+  }
 }

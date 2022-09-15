@@ -1,23 +1,18 @@
 import * as _ from 'lodash'
 import type { Disposable } from 'vscode'
-import * as list from './TomHubList'
-import {
-  Category,
-  defaultProblem,
-  // ProblemState,
-  keyCommands,
-  SortingStrategy } from '../tomjs/ttenum'
+import * as list from '../apis/docurls'
+import { Category, SortingStrategy } from '../common/ttenum'
+import { objectUrl } from '../common/models'
 import { TomHubNode } from './TomHubNode'
 
 class UrlsNodeManager implements Disposable {
-  private urlNodeMap: Map<string, TomHubNode> =
-    new Map<string, TomHubNode>()
+  private urlNodeMap: Map<string, TomHubNode> = new Map<string, TomHubNode>()
   private tagSet: Set<string> = new Set<string>()
 
   // 刷新设置数据
   public async refreshCache(): Promise<void> {
     this.dispose()
-    for (const problem of await list.getList()) {
+    for (const problem of await list.getDocList()) {
       // 可以判断数据项是否启用，然后获取所有数据
       //   if (shouldHideSolved && problem.state === ProblemState.AC) {
       //     continue
@@ -33,36 +28,50 @@ class UrlsNodeManager implements Disposable {
   // 获取所有根目录节点，也就是获取所有一级文件目录
   public getRootNodes(): TomHubNode[] {
     return [
-      new TomHubNode(Object.assign({}, defaultProblem, {
-        id: Category.All,
-        name: Category.All
-      })),
-      new TomHubNode(Object.assign({}, defaultProblem, {
-        id: Category.Doc,
-        name: Category.Doc
-      })),
-      new TomHubNode(Object.assign({}, defaultProblem, {
-        id: Category.Tools,
-        name: Category.Tools
-      })),
-      new TomHubNode(Object.assign({}, defaultProblem, {
-        id: Category.Video,
-        name: Category.Video
-      })),
-      new TomHubNode(Object.assign({}, defaultProblem, {
-        id: Category.Tags,
-        name: Category.Tags
-      })),
-      new TomHubNode(Object.assign({}, defaultProblem, {
-        id: Category.Pic,
-        name: Category.Pic
-      })),
-      new TomHubNode(Object.assign({}, defaultProblem, {
-        id: Category.Cmd,
-        name: Category.Cmd
-      }))
+      new TomHubNode(
+        Object.assign({}, objectUrl, {
+          id: Category.All,
+          name: Category.All
+        })
+      ),
+      new TomHubNode(
+        Object.assign({}, objectUrl, {
+          id: Category.Doc,
+          name: Category.Doc
+        })
+      ),
+      new TomHubNode(
+        Object.assign({}, objectUrl, {
+          id: Category.Tools,
+          name: Category.Tools
+        })
+      ),
+      new TomHubNode(
+        Object.assign({}, objectUrl, {
+          id: Category.Video,
+          name: Category.Video
+        })
+      ),
+      new TomHubNode(
+        Object.assign({}, objectUrl, {
+          id: Category.Tags,
+          name: Category.Tags
+        })
+      ),
+      new TomHubNode(
+        Object.assign({}, objectUrl, {
+          id: Category.Pic,
+          name: Category.Pic
+        })
+      ),
+      new TomHubNode(
+        Object.assign({}, objectUrl, {
+          id: Category.Cmd,
+          name: Category.Cmd
+        })
+      )
       // 开始新增固定命令行菜单
-      // new TomHubNode(Object.assign({}, defaultProblem, {
+      // new TomHubNode(Object.assign({}, objectUrl, {
       //   id: '101',
       //   isCmd: true,
       //   isUrl: true,
@@ -76,9 +85,7 @@ class UrlsNodeManager implements Disposable {
 
   // 获取 [All: 所有] 一级文件目录内的数据项
   public getAllNodes(): TomHubNode[] {
-    return this.applySortingStrategy(
-      Array.from(this.urlNodeMap.values()),
-    )
+    return this.applySortingStrategy(Array.from(this.urlNodeMap.values()))
     // return Array.from(this.urlNodeMap.values())
   }
 
@@ -86,15 +93,15 @@ class UrlsNodeManager implements Disposable {
   public getAllDocNodes(): TomHubNode[] {
     // const res: TomHubNode[] = []
     // res.push(
-    //   new TomHubNode(Object.assign({}, defaultProblem, {
+    //   new TomHubNode(Object.assign({}, objectUrl, {
     //     id: `${Category.Difficulty}.Easy`,
     //     name: 'Easy'
     //   }), false),
-    //   new TomHubNode(Object.assign({}, defaultProblem, {
+    //   new TomHubNode(Object.assign({}, objectUrl, {
     //     id: `${Category.Difficulty}.Medium`,
     //     name: 'Medium'
     //   }), false),
-    //   new TomHubNode(Object.assign({}, defaultProblem, {
+    //   new TomHubNode(Object.assign({}, objectUrl, {
     //     id: `${Category.Difficulty}.Hard`,
     //     name: 'Hard'
     //   }), false),
@@ -124,47 +131,34 @@ class UrlsNodeManager implements Disposable {
 
   // 获取 [CMD: 命令类] 一级文件目录内的数据项
   public getAllCmdNodes(): TomHubNode[] {
-    // const list = Array.from(this.urlNodeMap.values())
-    // return list.filter((m) => m.type == Category.Cmd)
+    const list = Array.from(this.urlNodeMap.values())
+    return list.filter((m) => m.type == Category.Cmd)
     // 命令下所有选项都是固定的，用来代替命令输入
-    const node1 = new TomHubNode(Object.assign({}, defaultProblem, {
-      id: '101',
-      isCmd: true,
-      isUrl: true,
-      state: 2,
-      type: '命令',
-      name: '查看欢迎页',
-      url: keyCommands.welcome
-    }))
-    const node2 = new TomHubNode(Object.assign({}, defaultProblem, {
-      id: '102',
-      isCmd: true,
-      isUrl: true,
-      state: 2,
-      type: '命令',
-      name: '查看文档列表',
-      url: keyCommands.doclist
-    }))
-    const node3 = new TomHubNode(Object.assign({}, defaultProblem, {
-      id: '103',
-      isCmd: true,
-      isUrl: true,
-      state: 2,
-      type: '命令',
-      name: '文档配置菜单',
-      url: keyCommands.config
-    }))
-    return [node1, node2, node3]
+    // const node1 = new TomHubNode(Object.assign({}, objectUrl, {
+    //   id: '101',
+    //   isCmd: true,
+    //   isUrl: true,
+    //   state: 2,
+    //   type: '命令',
+    //   name: '查看欢迎页',
+    //   url: keyCommands.welcome
+    // }))
+    // return [node1]
+    return []
   }
 
   // 获取 [Tags: 标签分类] 一级文件目录内的二级目录并排序
   public getAllTagsNodes(): TomHubNode[] {
     const res: TomHubNode[] = []
     for (const tag of this.tagSet.values()) {
-      res.push(new TomHubNode(Object.assign({}, defaultProblem, {
-        id: `${Category.Tags}.${tag}`,
-        name: _.startCase(tag)
-      })))
+      res.push(
+        new TomHubNode(
+          Object.assign({}, objectUrl, {
+            id: `${Category.Tags}.${tag}`,
+            name: _.startCase(tag)
+          })
+        )
+      )
     }
     this.sortSubCategoryNodes(res, Category.Tags)
     return res
@@ -190,24 +184,15 @@ class UrlsNodeManager implements Disposable {
     // The sub-category node's id is named as {Category.SubName}
     const metaInfo: string[] = id.split('.')
     const res: TomHubNode[] = []
-    for (const node of this.urlNodeMap.values()) {
+    for (const node of this.getAllNodes()) {
       switch (metaInfo[0]) {
-      //   case Category.Company:
-      //     if (node.companies.indexOf(metaInfo[1]) >= 0) {
-      //       res.push(node)
-      //     }
-      //     break
-      //   case Category.Difficulty:
-      //     if (node.difficulty === metaInfo[1]) {
-      //       res.push(node)
-      //     }
-      //     break
         case Category.Tags:
           if (node.tags.indexOf(metaInfo[1]) >= 0) {
             res.push(node)
           }
           break
         default:
+          if (node.type === metaInfo[0]) res.push(node)
           break
       }
     }
@@ -225,23 +210,23 @@ class UrlsNodeManager implements Disposable {
     category: Category
   ): void {
     switch (category) {
-    // case Category.Difficulty:
-    //   subCategoryNodes.sort((a: LeetCodeNode, b: LeetCodeNode): number => {
-    //     function getValue(input: LeetCodeNode): number {
-    //       switch (input.name.toLowerCase()) {
-    //       case 'easy':
-    //         return 1
-    //       case 'medium':
-    //         return 2
-    //       case 'hard':
-    //         return 3
-    //       default:
-    //         return Number.MAX_SAFE_INTEGER
-    //       }
-    //     }
-    //     return getValue(a) - getValue(b)
-    //   })
-    //   break
+      // case Category.Difficulty:
+      //   subCategoryNodes.sort((a: LeetCodeNode, b: LeetCodeNode): number => {
+      //     function getValue(input: LeetCodeNode): number {
+      //       switch (input.name.toLowerCase()) {
+      //       case 'easy':
+      //         return 1
+      //       case 'medium':
+      //         return 2
+      //       case 'hard':
+      //         return 3
+      //       default:
+      //         return Number.MAX_SAFE_INTEGER
+      //       }
+      //     }
+      //     return getValue(a) - getValue(b)
+      //   })
+      //   break
       case Category.Tags:
         subCategoryNodes.sort((a: TomHubNode, b: TomHubNode): number => {
           if (a.name === 'Unknown') {
@@ -264,11 +249,10 @@ class UrlsNodeManager implements Disposable {
     switch (strategy) {
       case SortingStrategy.Asc:
         return nodes.sort(
-          (x: TomHubNode, y: TomHubNode) => Number(x.id) - Number(y.id))
-        // case SortingStrategy.AcceptanceRateDesc:
-        //   return nodes.sort(
-        //     (x: TomHubNode, y: TomHubNode) => Number(y.id) - Number(x.id))
-      default: return nodes
+          (x: TomHubNode, y: TomHubNode) => Number(x.id) - Number(y.id)
+        )
+      default:
+        return nodes
     }
   }
 }

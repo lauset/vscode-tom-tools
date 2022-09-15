@@ -1,7 +1,7 @@
 {
 	"_url": "https://cdn.jsdelivr.net/gh/lauset/vscode-tom-tools/data/weburls.json",
-	"_online": "github",
-	"_update": "",
+	"_online": "local",
+	"_update": "2022-09-15T04:32:40.991Z",
 	"list": [
 		{
 			"id": "1",

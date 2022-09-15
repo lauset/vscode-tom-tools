@@ -5,6 +5,7 @@ import type {
   ProviderResult,
   Uri
 } from 'vscode'
+import { explorer } from '../common/ttenum'
 import { ThemeColor } from 'vscode'
 
 export class UrlsDecorationProvider implements FileDecorationProvider {
@@ -15,18 +16,18 @@ export class UrlsDecorationProvider implements FileDecorationProvider {
   }
 
   private readonly ITEM_COLOR: { [key: string]: ThemeColor } = {
-    Documents : new ThemeColor('charts.green'),
+    Documents: new ThemeColor('charts.green'),
     Tools: new ThemeColor('charts.yellow'),
     Videos: new ThemeColor('charts.red')
   }
 
-  public provideFileDecoration(uri: Uri): ProviderResult<FileDecoration>  {
+  public provideFileDecoration(uri: Uri): ProviderResult<FileDecoration> {
     // 判断是否开启文件夹颜色区分
     // if (!this.isDifficultyBadgeEnabled()) {
     //   return
     // }
 
-    if (uri.scheme !== 'tomHubTools' && uri.authority !== 'urls') {
+    if (uri.scheme !== explorer && uri.authority !== 'urls') {
       return
     }
 
@@ -39,7 +40,7 @@ export class UrlsDecorationProvider implements FileDecorationProvider {
   }
 
   // private isDifficultyBadgeEnabled(): boolean {
-  //   const configuration: WorkspaceConfiguration = 
+  //   const configuration: WorkspaceConfiguration =
   //     workspace.getConfiguration()
   //   return configuration.get<boolean>('tt.colorOverride', false)
   // }

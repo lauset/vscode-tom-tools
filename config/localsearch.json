@@ -1,0 +1,34 @@
+{
+  "_url": "https://cdn.jsdelivr.net/gh/lauset/vscode-tom-tools/data/websearch.json",
+  "_online": "local",
+  "_update": "",
+  "list": [
+    {
+      "id": "1",
+      "isDefault": true,
+      "enabled": true,
+      "name": "百度",
+      "desc": "百度一下，你就知道",
+      "url": "https://www.baidu.com/s?wd=%s",
+      "icon": ""
+    },
+    {
+      "id": "2",
+      "isDefault": false,
+      "enabled": false,
+      "name": "谷歌",
+      "desc": "Google",
+      "url": "https://www.google.com/search?q=%s",
+      "icon": ""
+    },
+    {
+      "id": "3",
+      "isDefault": false,
+      "enabled": false,
+      "name": "CSDN",
+      "desc": "成就XX程序员",
+      "url": "https://so.csdn.net/so/search?q=%s",
+      "icon": ""
+    }
+  ]
+}

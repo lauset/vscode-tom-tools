@@ -1,6 +1,6 @@
 import * as needle from 'needle'
 
-const debugRequest = true
+const debugRequest = false
 const requestMsg = {
   fail: '请求失败，可重新尝试',
   unachievable: '接口无法访问了',

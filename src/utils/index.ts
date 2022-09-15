@@ -3,6 +3,7 @@ import * as os from 'os'
 import * as path from 'path'
 import * as vscode from 'vscode'
 import { exec } from 'child_process'
+import { showError } from './message'
 
 const utils = {
   /**
@@ -19,14 +20,14 @@ const utils = {
         : null
     }
     if (!document) {
-      this.showError('当前激活的编辑器不是文件或者没有文件被打开！')
+      showError('当前激活的编辑器不是文件或者没有文件被打开！')
       return ''
     }
     const currentFile = (document.uri ? document.uri : document).fsPath
     let projectPath = null
     const wf: any = vscode.workspace.workspaceFolders
     if (!wf) {
-      this.showError('请先保存工作空间再操作吧！')
+      showError('请先保存工作空间再操作吧！')
       return ''
     }
 
@@ -34,7 +35,7 @@ const utils = {
     // 由于存在Multi-root工作区，暂时没有特别好的判断方法，先这样粗暴判断
     // 如果发现只有一个根文件夹，读取其子文件夹作为 workspaceFolders
     if (workspaceFolders.length == 0) {
-      this.showError('请先在工作空间添加文件夹再操作吧！')
+      showError('请先在工作空间添加文件夹再操作吧！')
       return ''
     }
     if (
@@ -43,8 +44,6 @@ const utils = {
     ) {
       const rootPath = workspaceFolders[0]
       const files = fs.readdirSync(rootPath)
-      console.log(files)
-
       workspaceFolders = files
         .filter((name) => !/^\./g.test(name))
         .map((name) => path.resolve(rootPath, name))
@@ -60,7 +59,7 @@ const utils = {
       projectPath = folder
     })
     if (!projectPath) {
-      this.showError('获取工程根路径异常！')
+      showError('获取工程根路径异常！')
       return ''
     }
     return projectPath
@@ -86,29 +85,8 @@ const utils = {
   lowerFirstLeter(word: string) {
     return (word || '').replace(/^\w/, (m) => m.toLowerCase())
   },
-  /**
-   * 全局日志开关，发布时可以注释掉日志输出
-   */
-  log(...args: any[]) {
-    console.log(...args)
-  },
-  /**
-   * 全局日志开关，发布时可以注释掉日志输出
-   */
-  error(...args: any[]) {
-    console.error(...args)
-  },
-  /**
-   * 弹出错误信息
-   */
-  showError(info: string) {
-    vscode.window.showErrorMessage(info)
-  },
-  /**
-   * 弹出提示信息
-   */
-  showInfo(info: string) {
-    vscode.window.showInformationMessage(info)
+  reloadVscode() {
+    vscode.commands.executeCommand('workbench.action.reloadWindow')
   },
   // findStrInFolder(folderPath, str) {},
   /**
@@ -175,40 +153,60 @@ const utils = {
     )
     return diskPath.with({ scheme: 'vscode-resource' }).toString()
   },
+  getOSType() {
+    const osType = os.type()
+    let resType = ''
+    switch (osType) {
+      case 'Windows_NT':
+        resType = 'windows'
+        break
+      case 'Darwin':
+        resType = 'macos'
+        break
+      case 'Linux':
+        resType = 'linux'
+        break
+      default:
+        break
+    }
+    return resType
+  },
   /**
-   * 在Finder中打开某个文件或者路径
+   * 在Finder中浏览
    */
   openFileInFinder(filePath: any) {
-    // 去除首【/】，替换【/】为windows分隔符【\】
     if (!filePath) return
+    if (!fs.existsSync(filePath)) {
+      showError(`文件不存在：${filePath}`)
+      return
+    }
+    const isDirectory = fs.statSync(filePath).isDirectory()
+    const dirName = path.dirname(filePath)
+    // const fileName = path.basename(filePath)
+    // 去除首【/】，替换【/】为windows分隔符【\】
     // if (filePath.indexOf('/') === 0) {
     //   filePath = filePath.substring(1, filePath.length)
     // }
     // filePath = filePath.replaceAll('/', '\\')
-    // 判断文件是否存在
-    if (!fs.existsSync(filePath)) {
-      this.showError(`文件不存在：${filePath}`)
-      return
-    }
-    exec(`explorer ${filePath}`)
     // 如果是目录则直接打开
-    // if (fs.statSync(filePath).isDirectory()) {
-    //   exec(`open ${filePath}`)
-    // } else {
-    // 如果是文件，要分开处理
-    // const fileName = path.basename(filePath)
-    // exec(`open ${filePath}`)
-    // windows 命令 explorer 打开目录或文件
-    //   filePath = path.dirname(filePath)
-    //   exec(`explorer ${filePath}`)
-    // }
+    const osType = this.getOSType()
+    if (osType === 'windows') {
+      if (isDirectory) exec(`explorer ${filePath}`)
+      else exec(`explorer ${dirName}`)
+    } else if (osType === 'macos') {
+      if (isDirectory) exec(`open ${filePath}`)
+      else exec(`open ${dirName}`)
+    } else {
+      if (isDirectory) exec(`open ${filePath}`)
+      else exec(`open ${dirName}`)
+    }
   },
   /**
    * 在vscode中打开某个文件
    * @param {*} path 文件绝对路径
    * @param {*} text 可选，如果不为空，则选中第一处匹配的对应文字
    */
-  openFileInVscode(path: any, text: any) {
+  openFileInVscode(path: string, text: string) {
     let options
     if (text) {
       const selection = this.getStrRangeInFile(path, text)
@@ -225,17 +223,17 @@ const utils = {
       .getConfiguration()
       .get('eggHelper.jdGuiPath')
     if (!jdGuiPath) {
-      this.showError('JD-GUI路径不能为空！')
+      showError('JD-GUI路径不能为空！')
       return
     }
     if (!fs.existsSync(jdGuiPath)) {
-      this.showError(
+      showError(
         '您还没有安装JD-GUI，请安装完后到vscode设置里面找到HSF助手并进行路径配置。'
       )
       return
     }
     if (!fs.existsSync(jarPath)) {
-      this.showError(`jar包未找到：${jarPath}`)
+      showError(`jar包未找到：${jarPath}`)
       return
     }
     exec(`open ${jarPath} -a ${jdGuiPath}`)
@@ -244,8 +242,14 @@ const utils = {
    * 使用默认浏览器中打开某个URL
    */
   openUrlInBrowser(url: string) {
-    // exec(`open '${url}'`)
-    exec(`start ${url}`)
+    const osType = this.getOSType()
+    if (osType === 'windows') {
+      exec(`start '${url}'`)
+    } else if (osType === 'macos') {
+      exec(`open '${url}'`)
+    } else {
+      exec(`open '${url}'`)
+    }
   },
   /**
    * 递归遍历清空某个资源的require缓存

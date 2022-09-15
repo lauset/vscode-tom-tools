@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>快搜列表(这个标题其实没什么用)</title>
+  <link rel="stylesheet" href="../libs/bootstrap-5.1.3-dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../libs/css/app.css" />
+  <style>
+    html,
+    body,
+    #app-search{
+      height: 100%;
+    }
+
+    .page-title {
+      margin-bottom: 20px;
+    }
+
+    .btn-primary {
+      background-color: #1890ff;
+      border-color: #1890ff;
+      outline: none;
+    }
+
+    .btn-primary:focus,
+    .btn-primary:hover {
+      background-color: #40a9ff;
+      border-color: #40a9ff;
+      outline: none;
+    }
+
+    .btn-primary.active,
+    .btn-primary:active {
+      background-color: #096dd9;
+      border-color: #096dd9;
+      color: #fff;
+      outline: none;
+    }
+
+    /* 浅色主题 */
+    body.vscode-light {
+      background: white;
+      color: #2f2f2f;
+    }
+    body.vscode-light table {
+      color: #3f3f3f;
+    }
+    body.vscode-light .table-hover>tbody>tr:hover>td,
+    body.vscode-light .table-hover>tbody>tr>th {
+      color: black;
+      cursor: pointer;
+    }
+    .btn-outline-info {
+      color: #00748c;
+      border-color: #00748c;
+    }
+    body.vscode-light .offcanvas {
+      color: #606060;
+    }
+    body.vscode-light .modal-content {
+      color: #606060;
+    }
+
+    /* 深色主题 */
+    body.vscode-dark {
+      background: #252526;
+      color: white;
+    }
+    body.vscode-dark .btn-close {
+      filter: invert(1);
+    }
+    body.vscode-dark .form-control,body.vscode-dark .form-select {
+      color: #959595;
+      background-color: #040404;
+    }
+    body.vscode-dark table {
+      color: #d1d1d1;
+    }
+    body.vscode-dark .offcanvas {
+      color: #d4d4d4;
+      background-color: #282a36;
+    }
+    body.vscode-dark .page-link {
+      color: #a0a0a0;
+      background-color: transparent;
+      cursor: pointer;
+    }
+    body.vscode-dark .page-link:hover {
+      color: #fff;
+    }
+    body.vscode-dark .table-hover>tbody>tr:hover>td,
+    .table-hover>tbody>tr:hover>th {
+      color: white;
+      cursor: pointer;
+    }
+    body.vscode-dark .modal-content {
+      color: #a8a8a8;
+      background-color: #282a36;
+    }
+    body.vscode-dark .alert-success {
+      color: #b3b3b3;
+      background-color: #1c1b1b;
+      border: none;
+    }
+    body.vscode-dark .alert-success>b {
+      color: #45ab7b;
+    }
+    body.vscode-dark .btn-link {
+      font-weight: 600;
+      color: #ffad4b;
+      text-decoration: underline;
+    }
+
+    /* 高对比度主题 */
+    body.vscode-high-contrast {
+      background: #252526;
+      color: white;
+    }
+    body.vscode-high-contrast table {
+      color: white;
+    }
+    body.vscode-high-contrast .table-hover>tbody>tr:hover>td,
+    .table-hover>tbody>tr:hover>th {
+      color: white;
+      cursor: pointer;
+    }
+    body.vscode-high-contrast .offcanvas {
+      color: #d4d4d4;
+      background-color: #282a36;
+    }
+    body.vscode-high-contrast .modal-content {
+      color: #a8a8a8;
+      background-color: #282a36;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app-search" class="container-fluid">
+    <div v-if="data.reloadFlag">
+      <p class="fw-bold fs-3 lh-lg">快搜配置</p>
+      <p class="alert alert-success">
+        配置文件模式: 
+        <b>{{data.config.enabled ? '本地模式': '远程模式'}}</b>
+        <a href="javascript:;" class="btn btn-sm btn-link" @click="updateConfig(!data.config.enabled)">
+          切换为{{!data.config.enabled ? '本地模式': '远程模式'}}
+        </a>
+        <br />
+        配置文件路径: 
+        <b v-show="data.localFlag" style="cursor:pointer;" @click="openFileInVscode">
+          {{data.config.path}}/{{data.config.file}}</b>
+        <b v-show="!data.localFlag" style="cursor:pointer;" @click="openUrlInBrowser(data.config.urlsGitee)">
+          {{data.config.urlsGitee}}
+        </b>
+        <br />
+        配置文件名称: {{data.config.file}}(本地模式下)
+      </p>
+      <button v-show="data.localFlag" type="button" class="btn btn-primary" data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling" @click="addOpen">
+        新 增
+      </button>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">图标</th>
+            <th scope="col">名称</th>
+            <th scope="col">地址</th>
+            <th scope="col">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(l,i) in data.list" :key="i">
+            <th scope="row">{{l.id}}</th>
+            <td>{{l.icon}}</td>
+            <td>{{l.name}}</td>
+            <td>{{l.url}}</td>
+            <td>
+              <button type="button" class="btn btn-sm btn-outline-warning" @click="setQuickPath(l)">
+                设为快速搜索
+              </button> 
+              &nbsp;
+              <button v-show="data.localFlag" type="button" class="btn btn-sm btn-outline-danger" 
+                data-bs-toggle="modal" data-bs-target="#exampleModal" @click="setDelData(l)">
+                删除
+              </button>
+              <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-sm">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">
+                        确认删除？
+                      </h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        取消
+                      </button>
+                      <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="delUrls(l)">
+                        删除
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+        id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasScrollingLabel">
+            {{data.addFlag?'新增':'修改'}}网链
+          </h5>
+          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <form class="was-validated">
+            <div class="mb-3">
+              <label for="validationServer01" class="form-label">网链ID（大于0，不可重复，可用于排序）</label>
+              <input type="text" class="form-control" required v-model="data.addUrls.id" />
+              <div class="invalid-feedback">一定要大于0哦</div>
+            </div>
+            <div class="mb-3">
+              <label for="validationServer01" class="form-label">名称（例如：百度）</label>
+              <input type="text" class="form-control" required v-model="data.addUrls.name" />
+              <div class="invalid-feedback">不能为空哦</div>
+            </div>
+            <div class="mb-3">
+              <label for="validationServer02" class="form-label">搜索地址（例如：https://www.baidu.com/s?wd=%s）%s会替换为快速搜索时选择的文字</label>
+              <input type="text" class="form-control" required v-model="data.addUrls.url" />
+              <div class="invalid-feedback">不能为空哦</div>
+            </div>
+            <div class="mb-3">
+              <label for="validationTextarea" class="form-label">描述信息（可选）</label>
+              <textarea class="form-control is-invalid" id="validationTextarea" rows="3" required>
+              </textarea>
+            </div>
+          </form>
+          <div class="mb-3">
+            <button class="btn btn-primary" @click="saveUrls">保 存</button>
+          </div>
+        </div>
+      </div>
+      <nav v-show="searchData.total > 0" aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <li v-show="searchData.pageNo > 1" class="page-item">
+            <a class="page-link" @click="changePage(1)">第一页</a>
+          </li>
+          <li v-for="(p,i) in searchData.page" :key="i" class="page-item">
+            <a class="page-link" @click="changePage(p)">{{p}}</a>
+          </li>
+          <li v-show="searchData.pageNo < searchData.page" class="page-item">
+            <a class="page-link" @click="changePage(0)">下一页</a>
+          </li>
+        </ul>
+      </nav>
+      <form class="form-horizontal">
+        <div class="form-group">
+          <p class="control-label">
+            想要操作表格，请确保已启用本地配置模式
+          </p>
+          <div class="col-sm-6">
+            <a href="javascript:;" class="btn btn-sm btn-outline-info" @click="openFileInFinder">在文件夹中浏览</a>
+            &nbsp;
+            <a href="javascript:;" class="btn btn-sm btn-primary" @click="openFileInVscode">编辑配置文件</a>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div v-else>
+      <div id="loader-outer">
+        <div class="loader-inner ball-beat">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="../libs/vue/vue3.js"></script> 
+  <script src="../libs/jquery/jquery.min.js"></script>
+  <script src="../libs/bootstrap-5.1.3-dist/js/bootstrap.min.js"></script>
+  <script src="../libs/js/events.js"></script>
+  <script src="./search.js"></script>
+</body>
+</html>

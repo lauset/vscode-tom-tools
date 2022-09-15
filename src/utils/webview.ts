@@ -2,6 +2,7 @@ import * as vscode from 'vscode'
 import * as fs from 'fs'
 import * as path from 'path'
 import util from './index'
+import { showError } from './message'
 
 /**
  * 从某个HTML文件读取能被Webview加载的HTML内容
@@ -9,7 +10,7 @@ import util from './index'
  * @param {*} templatePath 相对于插件根目录的html文件相对路径
  */
 const getWebViewContent = (
-  context: vscode.ExtensionContext,
+  context: { extensionPath: string },
   templatePath: string
 ) => {
   const resourcePath = util.getExtensionFileAbsolutePath(context, templatePath)
@@ -31,23 +32,25 @@ const getWebViewContent = (
 
 /**
  * 执行回调函数
+ *
  * @param {*} panel
  * @param {*} message
  * @param {*} resp
  */
 const invokeCallback = (panel: any, message: any, resp: any) => {
   // console.log('回调消息：', resp)
-  // 错误码在400-600之间的，默认弹出错误提示
+  // 错误码在400-600之间弹出错误提示
   if (
     typeof resp == 'object' &&
     resp.code &&
     resp.code >= 400 &&
     resp.code < 600
   ) {
-    util.showError(resp.message || '发生未知错误！')
+    showError(resp.message || '发生未知错误！')
   }
+  // 传递响应数据和自定义回调方法
   panel.webview.postMessage({
-    cmd: 'vscodeTTCallback',
+    type: 'vscodeTTCallback',
     cbid: message.cbid,
     data: resp
   })
