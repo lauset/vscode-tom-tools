@@ -31,7 +31,7 @@ const utils = {
       return ''
     }
 
-    let workspaceFolders = wf.map((item: any) => item.uri.path)
+    let workspaceFolders = wf.map((item: any) => item.uri.fsPath)
     // 由于存在Multi-root工作区，暂时没有特别好的判断方法，先这样粗暴判断
     // 如果发现只有一个根文件夹，读取其子文件夹作为 workspaceFolders
     if (workspaceFolders.length == 0) {
@@ -244,11 +244,11 @@ const utils = {
   openUrlInBrowser(url: string) {
     const osType = this.getOSType()
     if (osType === 'windows') {
-      exec(`start '${url}'`)
+      exec(`start ${url}`)
     } else if (osType === 'macos') {
-      exec(`open '${url}'`)
+      exec(`open ${url}`)
     } else {
-      exec(`open '${url}'`)
+      exec(`open ${url}`)
     }
   },
   /**

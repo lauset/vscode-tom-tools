@@ -90,6 +90,7 @@ new Vue({
           )
         }
       })
+      this.refreshTree()
     },
     openFileInFinder() {
       callVscode({ cmd: 'openFileInFinder', entry: 'doclist' }, (_resp) => {
@@ -147,7 +148,7 @@ new Vue({
         isCmd: false,
         state: 3,
         name: 'VueJS',
-        url: 'https://vuejs.org/',
+        url: 'https://cn.vuejs.org/',
         type: 'Documents',
         tag: '',
         tags: ['tools', 'docs']

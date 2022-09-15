@@ -89,8 +89,8 @@ async function getListFromLocal(url: string, bkurl: string) {
     fs.readFile(url, 'utf8', (err, data) => {
       if (err) resolve(errorUrls)
       const body = JSON.parse(data)
-      body.update = new Date()
-      body.online = 'local'
+      body._update = new Date()
+      body._online = 'local'
       fs.writeFileSync(bkurl, JSON.stringify(body))
       resolve(body)
     })
@@ -211,22 +211,3 @@ export async function delDocToLocal(urlsData: any): Promise<any> {
     }
   })
 }
-
-// function parseState(stateOutput: string): ProblemState {
-//   return ProblemState.Unknown
-//   if (!stateOutput) {
-//     return ProblemState.Unknown
-//   }
-//   switch (stateOutput.trim()) {
-//     case 'v':
-//     case '✔':
-//     case '√':
-//       return ProblemState.AC
-//     case 'X':
-//     case '✘':
-//     case '×':
-//       return ProblemState.NotAC
-//     default:
-//       return ProblemState.Unknown
-//   }
-// }

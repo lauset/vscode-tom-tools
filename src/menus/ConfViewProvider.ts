@@ -18,7 +18,7 @@ export class ConfViewProvider implements vscode.WebviewViewProvider {
     const global = { panel: this._view }
     webviewView.webview.html = getWebViewContent(
       {
-        extensionPath: this._extensionUri.path
+        extensionPath: this._extensionUri.fsPath
       },
       'webviews/configs.html'
     )
@@ -51,7 +51,7 @@ export class WeaViewProvider implements vscode.WebviewViewProvider {
     const global = { panel: this._view }
     webviewView.webview.html = getWebViewContent(
       {
-        extensionPath: this._extensionUri.path
+        extensionPath: this._extensionUri.fsPath
       },
       'webviews/weather.html'
     )

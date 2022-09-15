@@ -49,7 +49,7 @@ const app = {
           entry: 'search'
         }, (resp) => {
           if (resp.code === 0) 
-            info(`快速搜索已设置为【${name}】\n(${resp.data.value})`, { modal: true })
+            info(`快速搜索已设置为【${name}】`, { modal: true })
         }
       )
     }

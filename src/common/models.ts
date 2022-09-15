@@ -41,7 +41,7 @@ export const defaultUrl: IUrl = {
   isCmd: false,
   state: UrlState.Unknown,
   name: 'Vue.js',
-  url: 'https://v3.cn.vuejs.org/',
+  url: 'https://cn.vuejs.org/',
   type: '开发文档',
   tags: ['framework', 'vue']
 }

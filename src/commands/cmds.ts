@@ -13,7 +13,7 @@ import utils from '../utils'
 const cmdSo = (textEditor) => {
   const text = textEditor.document.getText(textEditor.selection)
   let url = vscode.workspace.getConfiguration().get<string>(keyConfig.searchUrl)
-  if (!url || url === '%s') url = 'https://www.baidu.com/s?wd=%s'
+  if (!url) url = 'https://www.baidu.com/s?wd=%s'
   const rurl = url.replace('%s', text)
   utils.openUrlInBrowser(rurl)
 }
@@ -23,7 +23,7 @@ const cmdMenuShow = () => {
 }
 
 const cmdGetFilePath = async (uri) => {
-  const msg = `Path: ${uri ? uri.path : 'None'}`
+  const msg = `Path: ${uri ? uri.fsPath : 'None'}`
   const selection = await vscode.window.showInformationMessage(
     msg,
     'Open In OS',
@@ -31,7 +31,7 @@ const cmdGetFilePath = async (uri) => {
   )
   if (selection !== undefined) {
     if (selection === 'Open In OS') {
-      utils.openFileInFinder(uri.path)
+      utils.openFileInFinder(uri.fsPath)
     }
   }
 }

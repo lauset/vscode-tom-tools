@@ -1,4 +1,3 @@
-import * as _ from 'lodash'
 import type { Disposable } from 'vscode'
 import * as list from '../apis/docurls'
 import { Category, SortingStrategy } from '../common/ttenum'
@@ -155,7 +154,7 @@ class UrlsNodeManager implements Disposable {
         new TomHubNode(
           Object.assign({}, objectUrl, {
             id: `${Category.Tags}.${tag}`,
-            name: _.startCase(tag)
+            name: tag[0].toUpperCase() + tag.substr(1)	
           })
         )
       )

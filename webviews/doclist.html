@@ -149,12 +149,17 @@
         <br />
         配置文件路径: 
         <b v-show="localFlag" style="cursor:pointer;" @click="openFileInVscode">
-          {{urlsConfig.path}}/{{urlsConfig.file}}</b>
+          {{urlsConfig.path}}
+        </b>
         <b v-show="!localFlag" style="cursor:pointer;" @click="openUrlInBrowser(urlsConfig.urlsGitee)">
           {{urlsConfig.urlsGitee}}
         </b>
         <br />
-        配置文件名称: {{urlsConfig.file}}(本地模式下)
+        配置文件名称: 
+        <b>
+          {{urlsConfig.file}}
+        </b>
+        (本地模式下)
       </p>
       <!-- <p v-if="!urlsConfig.enabled" class="alert alert-danger" style="width: 65%">
         注意：您还'未启用'文档列表数据的本地配置文件，目前使用的是远程GIT网络仓库中的配置文件 <br/>
