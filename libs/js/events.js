@@ -37,7 +37,7 @@ window.addEventListener('message', (event) => {
   const message = event.data
   switch (message.type) {
     case 'vscodeTTCallback': {
-      console.log('vscodeTTCallback', message.data)
+      // console.log('vscodeTTCallback', message.data)
         ; (callbacks[message.cbid] || function () { })(message.data)
       delete callbacks[message.cbid]
       break

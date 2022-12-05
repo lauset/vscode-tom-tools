@@ -77,12 +77,12 @@ function handleYQ163(resp) {
   const yqConfirm = document.getElementById('yq-confirm')
   const yqStore = document.getElementById('yq-store')
 
-  yqInput.innerText = total.input
-  yqNo.innerText = extData.noSymptom
-  yqHeal.innerText = total.heal
-  yqDead.innerText = total.dead
-  yqConfirm.innerText = total.confirm
-  yqStore.innerText = total.confirm - total.heal
+  yqInput.innerText = total.input || 0
+  yqNo.innerText = extData.noSymptom || 0
+  yqHeal.innerText = total.heal || 0
+  yqDead.innerText = total.dead || 0
+  yqConfirm.innerText = total.confirm || 0
+  yqStore.innerText = (total.confirm - total.heal) || 0
 
   const yqInputAdd = document.getElementById('yq-input-add')
   const yqNoAdd = document.getElementById('yq-no-add')
@@ -91,10 +91,10 @@ function handleYQ163(resp) {
   // const yqConfirmAdd = document.getElementById('yq-confirm-add')
   // const yqStoreAdd = document.getElementById('yq-store-add')
 
-  yqInputAdd.innerText = `+ ${today.input}`
-  yqNoAdd.innerText = `+ ${extData.incrNoSymptom}`
-  yqHealAdd.innerText = `+ ${today.heal}`
-  yqDeadAdd.innerText = `+ ${today.dead}`
+  yqInputAdd.innerText = `+ ${today.input || 0}`
+  yqNoAdd.innerText = `+ ${extData.incrNoSymptom || 0}`
+  yqHealAdd.innerText = `+ ${today.heal || 0}`
+  yqDeadAdd.innerText = `+ ${today.dead || 0}`
   // yqConfirmAdd.innerText = total.confirm
   // yqStoreAdd.innerText = total.confirm - total.heal
 }

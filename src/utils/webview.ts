@@ -1,8 +1,23 @@
 import * as vscode from 'vscode'
 import * as fs from 'fs'
-import * as path from 'path'
+// import * as path from 'path'
 import util from './index'
 import { showError } from './message'
+
+function getLibStr(prefix: string, uri: string) {
+  let str = ''
+  let tag = ''
+  if (prefix.startsWith('<link')) tag = 'style'
+  else if (prefix.startsWith('<script')) tag = 'script'
+  try {
+    str = fs.readFileSync(uri, 'utf-8')
+  } catch (error) {}
+  return `
+    <${tag}>
+      ${str}
+    </${tag}>
+  `
+}
 
 /**
  * 从某个HTML文件读取能被Webview加载的HTML内容
@@ -10,22 +25,28 @@ import { showError } from './message'
  * @param {*} templatePath 相对于插件根目录的html文件相对路径
  */
 const getWebViewContent = (
-  context: { extensionPath: string },
+  context: {
+    extensionPath: string
+    extensionUri: vscode.Uri
+  },
   templatePath: string
 ) => {
   const resourcePath = util.getExtensionFileAbsolutePath(context, templatePath)
-  const dirPath = path.dirname(resourcePath)
+  // const dirPath = path.dirname(resourcePath)
   let html = fs.readFileSync(resourcePath, 'utf-8')
   // vscode不支持直接加载本地资源，需要替换成其专有路径格式，这里只是简单的将样式和JS的路径替换
   html = html.replace(
-    /(<link.+?href="|<script.+?src="|<img.+?src=")(.+?)"/g,
-    (_m, $1, $2) =>
-      `${
-        $1 +
-        vscode.Uri.file(path.resolve(dirPath, $2))
-          .with({ scheme: 'vscode-resource' })
-          .toString()
-      }"`
+    /(<link.+?href="|<script.+?src="|<img.+?src=")(.+?)("\s*\/>|"><\/script>)/g,
+    (_m, $1, $2) => getLibStr(
+      $1,
+      vscode.Uri.joinPath(context.extensionUri, 'libs', $2).fsPath
+    )
+    // return `${
+    //   $1 +
+    //   vscode.Uri.file(path.resolve(dirPath, $2))
+    //     .with({ scheme: 'vscode-resource' })
+    //     .toString()
+    // }`
   )
   return html
 }

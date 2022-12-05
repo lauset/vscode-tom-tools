@@ -1,4 +1,4 @@
-import type * as vscode from 'vscode'
+import * as vscode from 'vscode'
 import messageHandler from '../common/events'
 import { getWebViewContent } from '../utils/webview'
 
@@ -13,12 +13,16 @@ export class ConfViewProvider implements vscode.WebviewViewProvider {
     this._view = webviewView
     webviewView.webview.options = {
       enableScripts: true,
-      localResourceRoots: [this._extensionUri]
+      localResourceRoots: [
+        vscode.Uri.file(this._extensionUri.fsPath),
+        vscode.Uri.joinPath(this._extensionUri, 'libs')
+      ]
     }
     const global = { panel: this._view }
     webviewView.webview.html = getWebViewContent(
       {
-        extensionPath: this._extensionUri.fsPath
+        extensionPath: this._extensionUri.fsPath,
+        extensionUri: this._extensionUri
       },
       'webviews/configs.html'
     )
@@ -47,11 +51,12 @@ export class WeaViewProvider implements vscode.WebviewViewProvider {
     webviewView.webview.options = {
       enableScripts: true,
       localResourceRoots: [this._extensionUri]
-    }
+    }    
     const global = { panel: this._view }
     webviewView.webview.html = getWebViewContent(
       {
-        extensionPath: this._extensionUri.fsPath
+        extensionPath: this._extensionUri.fsPath,
+        extensionUri: this._extensionUri
       },
       'webviews/weather.html'
     )
