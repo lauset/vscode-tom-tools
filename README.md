@@ -61,7 +61,7 @@
 **注意事项**
 
 <p align="center">
-  <img src="./data/screenshots/warn01.png" alt="">
+  <img src="./screenshots/warn01.png" alt="">
 </p>
 
 VSCode 会进行后台检测磁盘上的样式之类的文件是否已更改，更改了样式后插件会有一下提示 **安装似乎已损坏** ，不再提示即可
@@ -311,7 +311,7 @@ const defaultSearch: ISearch = {
 >**安装依赖**
 
 ```sh
-pnpm install
+npm install
 ```
 
 >**运行插件**
@@ -330,10 +330,16 @@ npm run compile
 
 >**打包部署**
 
-可全局安装 `vsce`
+可全局安装 `vsce` 或作为 Dev 依赖
+
+~~pnpm 下操作~~ 待官方修复依赖问题
 
 ```sh
-npm install -g vsce
+# 已过时: npm install -g vsce
+# nmp i -D @vscode/vsce
+npm install --global @vscode/vsce --force
+
+vsce --version
 ```
 
 指定平台打包
@@ -342,10 +348,11 @@ npm install -g vsce
 vsce package --target win32-x64
 ```
 
-~~pnpm 下操作~~ 待官方修复依赖问题
+全平台打包
 
 ```sh
-pnmp i -D vsce
+# 打包操作
+vsce package
 
 vsce package --no-dependencies
 ```

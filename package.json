@@ -2,7 +2,7 @@
   "name": "tomhub-tools",
   "displayName": "Tom Tools",
   "description": "Convenience tools",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "engines": {
     "vscode": "^1.71.0"
   },
@@ -204,24 +204,24 @@
   },
   "devDependencies": {
     "@types/glob": "^8.0.0",
-    "@types/lodash": "^4.14.184",
-    "@types/mocha": "^9.1.1",
+    "@types/lodash": "^4.14.191",
+    "@types/mocha": "^10.0.1",
     "@types/needle": "^2.5.3",
-    "@types/node": "~18.7.16",
+    "@types/node": "~18.11.10",
     "@types/vscode": "^1.71.0",
-    "@typescript-eslint/eslint-plugin": "^5.36.2",
-    "@typescript-eslint/parser": "^5.36.2",
-    "@vscode/test-electron": "^2.1.5",
-    "eslint": "^8.23.0",
-    "eslint-define-config": "^1.7.0",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^5.45.0",
+    "@vscode/test-electron": "^2.2.0",
+    "@vscode/vsce": "^2.15.0",
+    "eslint": "^8.29.0",
+    "eslint-define-config": "^1.12.0",
     "glob": "^8.0.3",
-    "mocha": "^10.0.0",
-    "prettier": "^2.7.1",
-    "tailwindcss": "^3.1.8",
-    "typescript": "^4.8.3",
-    "vsce": "^2.11.0"
+    "mocha": "^10.1.0",
+    "prettier": "^2.8.0",
+    "tailwindcss": "^3.2.4",
+    "typescript": "^4.9.3"
   },
   "dependencies": {
-    "needle": "^3.1.0"
+    "needle": "^3.2.0"
   }
 }
