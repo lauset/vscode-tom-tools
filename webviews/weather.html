@@ -2,10 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>天气监测</title>
     <link href="css/app.css" />
     <link href="css/output.css" />
+    <!-- dev styles -->
+    <!-- <link rel="stylesheet" href="../libs/css/app.css"></link>  -->
+    <!-- <link rel="stylesheet" href="../libs/css/output.css"></link> -->
     <style>
       body.vscode-light .bg-zinc-800{
         background-color: whitesmoke;
@@ -48,49 +51,59 @@
       <div class="chart-container" style="position: relative; width: 80vw; margin: 10px auto;">
         <canvas id="weaChart" onResize="weaChartResize" height="300px"></canvas>
       </div>
-      <div class="grid grid-cols-2 gap-1 p-2 text-xs">
-        <div class="yq-box m-2 rounded-md border-2 border-orange-500 p-2 text-center">
-          <p>境外输入</p>
-          <text class="overflow-ellipsis break-all text-sm font-bold text-orange-500">
-            <text id="yq-input"></text>
-          </text>
-          <p id="yq-input-add" class="text-orange-600"></p>
+      <div class="p-2 text-xs">
+        <!-- row1 -->
+        <div class="flex flex-wrap">
+          <div class="flex-1 min-w-max yq-box m-2 rounded-md border-2 border-orange-500 p-2 text-center">
+            <p>境外输入</p>
+            <text class="overflow-ellipsis break-all text-sm font-bold text-orange-500">
+              <text id="yq-input"></text>
+            </text>
+            <p id="yq-input-add" class="text-orange-600"></p>
+          </div>
+          <div class="flex-1 min-w-max yq-box m-2 rounded-md border-2 border-blue-500 p-2 text-center">
+            <p>无症状感染</p>
+            <text class="overflow-ellipsis break-all text-sm font-bold text-blue-500">
+              <text id="yq-no"></text>
+            </text>
+            <p id="yq-no-add" class="text-blue-600"></p>
+          </div>
         </div>
-        <div class="yq-box m-2 rounded-md border-2 border-blue-500 p-2 text-center">
-          <p>无症状感染</p>
-          <text class="overflow-ellipsis break-all text-sm font-bold text-blue-500">
-            <text id="yq-no"></text>
-          </text>
-          <p id="yq-no-add" class="text-blue-600"></p>
+        <!-- row2 -->
+        <div class="flex flex-wrap">
+          <div class="flex-1 min-w-max yq-box m-2 rounded-md border-2 border-green-500 p-2 text-center">
+            <p>累计治愈</p>
+            <text class="overflow-ellipsis break-all text-sm font-bold text-green-500">
+              <text id="yq-heal"></text>
+            </text>
+            <p id="yq-heal-add" class="text-green-600"></p>
+          </div>
+          <div class="flex-1 min-w-max yq-box m-2 rounded-md border-2 border-gray-500 p-2 text-center">
+            <p>累计死亡</p>
+            <text class="overflow-ellipsis break-all text-sm font-bold text-gray-500">
+              <text id="yq-dead"></text>
+            </text>
+            <p id="yq-dead-add" class="text-gray-600"></p>
+          </div>
         </div>
-        <div class="yq-box m-2 rounded-md border-2 border-green-500 p-2 text-center">
-          <p>累计治愈</p>
-          <text class="overflow-ellipsis break-all text-sm font-bold text-green-500">
-            <text id="yq-heal"></text>
-          </text>
-          <p id="yq-heal-add" class="text-green-600"></p>
+        <!-- row3 -->
+        <div class="flex flex-wrap">
+          <div class="flex-1 min-w-max yq-box m-2 rounded-md border-2 border-indigo-500 p-2 text-center">
+            <p>累计确诊</p>
+            <text class="overflow-ellipsis break-all text-sm font-bold text-indigo-500">
+              <text id="yq-confirm"></text>
+            </text>
+            <p id="yq-confirm-add" class="text-indigo-600"></p>
+          </div>
+          <div class="flex-1 min-w-max yq-box m-2 rounded-md border-2 border-purple-500 p-2 text-center">
+            <p>现有确诊</p>
+            <text class="overflow-ellipsis break-all text-sm font-bold text-purple-500">
+              <text id="yq-store"></text>
+            </text>
+            <p id="yq-store-add" class="text-purple-600"></p>
+          </div>
         </div>
-        <div class="yq-box m-2 rounded-md border-2 border-gray-500 p-2 text-center">
-          <p>累计死亡</p>
-          <text class="overflow-ellipsis break-all text-sm font-bold text-gray-500">
-            <text id="yq-dead"></text>
-          </text>
-          <p id="yq-dead-add" class="text-gray-600"></p>
-        </div>
-        <div class="yq-box m-2 rounded-md border-2 border-indigo-500 p-2 text-center">
-          <p>累计确诊</p>
-          <text class="overflow-ellipsis break-all text-sm font-bold text-indigo-500">
-            <text id="yq-confirm"></text>
-          </text>
-          <p id="yq-confirm-add" class="text-indigo-600"></p>
-        </div>
-        <div class="yq-box m-2 rounded-md border-2 border-purple-500 p-2 text-center">
-          <p>现有确诊</p>
-          <text class="overflow-ellipsis break-all text-sm font-bold text-purple-500">
-            <text id="yq-store"></text>
-          </text>
-          <p id="yq-store-add" class="text-purple-600"></p>
-        </div>
+        <!-- row end -->
       </div>
     </div>
     <script src="js/chart.min.js"></script>

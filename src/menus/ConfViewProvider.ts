@@ -50,7 +50,10 @@ export class WeaViewProvider implements vscode.WebviewViewProvider {
     this._view = webviewView
     webviewView.webview.options = {
       enableScripts: true,
-      localResourceRoots: [this._extensionUri]
+      localResourceRoots: [
+        vscode.Uri.file(this._extensionUri.fsPath),
+        vscode.Uri.joinPath(this._extensionUri, 'libs')
+      ]
     }    
     const global = { panel: this._view }
     webviewView.webview.html = getWebViewContent(
